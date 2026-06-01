@@ -1,0 +1,13 @@
+.claude/
+.baoyu-skills/
+.idea/
+.vscode/
+__pycache__/
+*.xlsx
+*.xls
+# Ignore local tracking spreadsheets so other users don't overwrite each other's data
+*-Kitchen-Tracker.xlsx
+# Keep the CSV files as templates if desired, or ignore them
+# Meal_Log.csv
+# Deals.csv
+# Ingredient_Prices.csv

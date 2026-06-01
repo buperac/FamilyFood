@@ -1,0 +1,61 @@
+{
+  "jobs": 1,
+  "tasks": [
+    {
+      "id": "w1mon",
+      "prompt": "Sheet-pan chicken fajitas: sizzling sliced grilled chicken with charred red, green and yellow bell peppers and onions, a stack of warm flour tortillas, lime wedges and cilantro. Professional appetizing food photography, 45-degree angle, soft natural window light, rustic ceramic dish on a warm wooden table, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1mon.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    },
+    {
+      "id": "w1tue",
+      "prompt": "Spaghetti bolognese: rich beef ragu over a nest of spaghetti topped with grated parmesan and fresh basil, a small crisp Caesar salad beside it. Professional appetizing food photography, 45-degree angle, soft natural window light, rustic ceramic dish on a warm wooden table, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1tue.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    },
+    {
+      "id": "w1wed",
+      "prompt": "Beef kofta in tikka masala: spiced beef meatballs in a creamy orange tomato curry sauce served over fluffy basmati rice, garnished with cilantro, warm naan bread on the side. Professional appetizing food photography, 45-degree angle, soft natural window light, rustic ceramic dish on a warm wooden table, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1wed.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    },
+    {
+      "id": "w1thu",
+      "prompt": "Ground beef tacos: three soft flour tortillas filled with seasoned ground beef, shredded cheddar, crunchy slaw, cilantro and lime wedges. Professional appetizing food photography, 45-degree angle, soft natural window light, rustic ceramic dish on a warm wooden table, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1thu.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    },
+    {
+      "id": "w1fri",
+      "prompt": "Homemade pepperoni pizza fresh from the oven, bubbling melted mozzarella and crisp pepperoni, on a rustic wooden board, one slice being lifted. Professional appetizing food photography, 45-degree angle, soft natural window light, warm wooden table, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1fri.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    },
+    {
+      "id": "w1sat",
+      "prompt": "Korean-style ground beef rice bowl: glossy sweet-savory ground beef over white rice with sliced cucumber, shredded carrot, a sunny fried egg on top, sesame seeds and sliced green onion. Professional appetizing food photography, 45-degree angle, soft natural window light, rustic ceramic bowl on a warm wooden table, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1sat.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    },
+    {
+      "id": "w1sun",
+      "prompt": "Roast chicken dinner: golden-skinned whole roast chicken on a platter with crispy roasted baby potatoes and bright green beans, fresh herbs and lemon. Professional appetizing food photography, 45-degree angle, soft natural window light, rustic table setting, shallow depth of field, vibrant fresh ingredients, cozy home-kitchen mood, no text, no words, no people.",
+      "image": "images/w1sun.png",
+      "provider": "google",
+      "model": "gemini-2.5-flash-image",
+      "ar": "3:2"
+    }
+  ]
+}

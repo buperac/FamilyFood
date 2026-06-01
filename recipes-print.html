@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gronning Family Kitchen — Printable Recipes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --paper-2:#F4ECDC; --ink:#2C2620; --ink-soft:#6B5F50;
+    --terra:#C65D3B; --terra-d:#A4441F; --herb:#5C7A52; --honey:#E4A340;
+    --line:#E3D7C2; --card:#FFFDF8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Karla',system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,h4{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto}
+  /* screen toolbar */
+  .bar{position:sticky;top:0;z-index:20;background:var(--ink);color:var(--paper);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .bar-in{display:flex;align-items:center;gap:14px;flex-wrap:wrap;max-width:860px;margin:0 auto;padding:11px 22px}
+  .bar b{font-family:'Fraunces';font-size:17px;font-weight:700}
+  .bar .links{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;font-size:13px}
+  .bar a{color:#E9DcC4;text-decoration:none;border:1px solid #5b5043;border-radius:999px;padding:3px 11px}
+  .bar a:hover{background:#3b3429}
+  .printbtn{font-family:'Karla';font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:9px;border:none;background:var(--honey);color:#3a2c10;cursor:pointer}
+  .printbtn:hover{filter:brightness(1.06)}
+  .intro{padding:34px 0 6px}
+  .intro .eyebrow{font-weight:700;letter-spacing:.3em;text-transform:uppercase;font-size:11.5px;color:var(--terra-d)}
+  .intro h1{font-size:clamp(30px,5vw,46px);font-weight:800;line-height:1.02;margin:6px 0 8px}
+  .intro p{color:var(--ink-soft);max-width:600px;font-size:15px}
+  .wkhead{font-family:'Fraunces';font-size:22px;font-weight:700;color:var(--terra-d);margin:30px 0 4px;padding-top:14px;border-top:2px solid var(--ink)}
+  /* recipe page */
+  .recipe{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin:18px 0;box-shadow:0 2px 0 var(--line)}
+  .rhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:11px;margin-bottom:14px}
+  .rtag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--terra);border-radius:6px;padding:3px 9px}
+  .rtag.bf{background:var(--honey);color:#3a2c10} .rtag.ln{background:var(--herb)}
+  .recipe h3{font-size:25px;font-weight:700;line-height:1.05;flex:1;min-width:60%}
+  .rmeta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .rmeta span{font-size:12px;font-weight:700;color:var(--ink-soft);background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:3px 9px}
+  .rmeta .beef{background:#F6E4D0;color:#8a4a1f;border-color:#EAC8A8}
+  .rcols{display:grid;grid-template-columns:1fr 1.35fr;gap:24px}
+  .rcols h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#9C3F1F;margin-bottom:8px}
+  .serves{font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-bottom:8px}
+  .ing li{list-style:none;font-size:14px;padding:3px 0 3px 16px;text-indent:-10px;border-bottom:1px dotted var(--line)}
+  .ing li::before{content:"•";color:var(--terra);font-weight:700;margin-right:7px}
+  .steps{counter-reset:step}
+  .steps li{list-style:none;font-size:14.5px;margin-bottom:9px;padding-left:30px;position:relative;line-height:1.45}
+  .steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:21px;height:21px;background:var(--ink);color:var(--paper);border-radius:50%;font-family:'Fraunces';font-size:12px;font-weight:700;display:grid;place-items:center}
+  .hacks{margin-top:14px;background:#F0F4EB;border-left:4px solid var(--herb);border-radius:0 8px 8px 0;padding:10px 14px;font-size:13.5px}
+  .hacks b{color:#3f5e30} .hacks li{margin:2px 0 2px 16px;font-size:13px}
+  .leftover{margin-top:9px;font-size:13px;color:var(--ink-soft);font-style:italic}
+  /* compact reference cards */
+  .refgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .refcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;break-inside:avoid}
+  .refcard h4{font-family:'Fraunces';font-size:16.5px;font-weight:600;margin-bottom:2px}
+  .refcard .m{font-size:11.5px;font-weight:700;color:var(--terra-d);margin-bottom:6px}
+  .refcard .i{font-size:12.5px;color:var(--ink);margin-bottom:5px}
+  .refcard .h{font-size:12.5px;color:var(--ink-soft)}
+  .refcard .u{font-size:11px;color:var(--herb);font-weight:700;margin-top:5px}
+  footer{border-top:2px solid var(--ink);margin-top:26px;padding:20px 0 50px;color:var(--ink-soft);font-size:13px}
+  @media(max-width:680px){.rcols{grid-template-columns:1fr}.refgrid{grid-template-columns:1fr}}
+  /* ---------- PRINT ---------- */
+  @media print{
+    @page{margin:1.4cm}
+    body{background:#fff;color:#000;font-size:11.5pt}
+    .no-print{display:none!important}
+    .wrap{max-width:none;padding:0}
+    .recipe{break-inside:avoid;page-break-inside:avoid;page-break-after:always;break-after:page;border:none;border-radius:0;box-shadow:none;padding:0;margin:0}
+    .recipe:last-of-type{page-break-after:auto}
+    .rhead{border-bottom:2px solid #000}
+    .rtag{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .steps li::before{background:#000!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .hacks{background:#f2f2f2!important;border-left:3px solid #000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .wkhead{border:none;color:#000}
+    #ref{page-break-before:always}
+    .refcard{border:1px solid #999}
+    .ing li{border-bottom:1px dotted #bbb}
+    .ing li::before,.refcard h4{color:#000}
+    .rcols h4{color:#000}
+    footer{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="bar no-print"><div class="bar-in">
+  <b>🍳 Gronning Recipes</b>
+  <button class="printbtn" onclick="window.print()">🖨 Print / Save as PDF</button>
+  <span class="links">
+    <a href="#w1">Week 1</a><a href="#w2">Week 2</a><a href="#w3">Week 3</a><a href="#ref">Breakfast &amp; Lunch</a>
+  </span>
+</div></div>
+<div class="wrap">
+  <div class="intro no-print">
+    <div class="eyebrow">Cupboard Copy · May 25 – Jun 14, 2026</div>
+    <h1>The Gronning Family Kitchen</h1>
+    <p>Every dinner with full amounts and steps — one recipe per printed page, sized to read while you cook. Hit <b>Print / Save as PDF</b> and keep it with the groceries. Quantities serve ~5 adult-equivalents (family of six, with leftovers). Beef is from your freezer stash; no fish; <b>no nuts</b> (peanut + tree-nut allergy in household — verify granola, jarred curry sauces, etc.); chicken is non-halal.</p>
+  </div>
+  <div id="dinnerArea"></div>
+  <section id="ref">
+    <h2 class="wkhead" style="color:var(--honey)">Breakfast rotation</h2>
+    <p class="serves no-print" style="margin-bottom:12px">Eggs stay the backbone; these add variety. Full versions live in <b>breakfast-rotation.md</b>.</p>
+    <div class="refgrid" id="bfArea"></div>
+    <h2 class="wkhead" style="color:var(--herb)">Lunch — interesting salads</h2>
+    <p class="serves no-print" style="margin-bottom:12px">For the grown-ups; many reuse last night's dinner. Full versions live in <b>lunch-salads.md</b>.</p>
+    <div class="refgrid" id="lnArea"></div>
+  </section>
+  <footer class="no-print">
+    <p><b>The Gronning Family Kitchen</b> — printable companion to <b>meal-planner.html</b>. Rate meals and jot notes in the interactive planner; full breakfast/lunch recipes are in the markdown files. Prices/quantities are estimates; adjust to taste.</p>
+  </footer>
+</div>
+<script>
+/* safe DOM builder (no innerHTML) */
+function E(tag,props,kids){const e=document.createElement(tag);props=props||{};
+  for(const k in props){const v=props[k];
+    if(k==='class')e.className=v;else if(k==='text')e.textContent=v;
+    else if(k.slice(0,2)==='on'&&typeof v==='function')e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v);}
+  (kids||[]).forEach(c=>{if(c!=null)e.append(c)});return e;}
+
+const DINNERS=[
+/* ---- WEEK 1 ---- */
+{wk:1,day:'Monday',title:'Sheet-Pan Chicken Fajitas',cuisine:'Tex-Mex',cal:'~580',prep:'30 min',kid:'Kid: medium',serves:'~5 adult servings + small leftovers',
+ ing:['1.5 lb chicken breast, cut in thin strips','3 bell peppers (mixed colours), sliced','1 large yellow onion, sliced','3 tbsp olive oil','Seasoning: 2 tsp chili powder, 1.5 tsp cumin, 1 tsp paprika, 1 tsp garlic powder, 1/2 tsp salt','10 small flour tortillas','To serve: shredded cheddar, sour cream, lime wedges, chopped cilantro'],
+ steps:['Heat oven to 425°F.','On a large sheet pan, toss chicken, peppers and onion with the oil and seasoning in one even layer.','Roast 20–22 min, stirring once, until chicken reaches 165°F and the veg edges char.','Warm tortillas (10 sec each in the microwave, or foil-wrapped in the oven for the last 5 min).','Serve buffet-style — everyone builds their own.'],
+ hacks:['Pull a few plain chicken strips aside before seasoning for the 4yo.','Kids are often happy with tortilla + cheese + plain chicken.']},
+{wk:1,day:'Tuesday',title:'Spaghetti + Ground Beef Bolognese & Caesar',cuisine:'Italian',cal:'~830',prep:'30 min',kid:'Kid: medium',beef:true,serves:'~5 adult servings',
+ ing:['1 lb spaghetti','1.5 lb ground beef (freezer stash, thawed)','1 large onion, diced','4 cloves garlic, minced','2 tbsp olive oil','1 jar (24 oz) marinara','1 tbsp tomato paste (optional, deepens flavour)','1 tsp Italian seasoning; salt + pepper','1/2 cup grated parmesan','Caesar: 3 romaine hearts chopped, 1 cup croutons, 1/3 cup Caesar dressing, shaved parm'],
+ steps:['Brown the beef in oil over medium-high, breaking it up, 7–8 min; drain excess fat.','Add onion + garlic; cook 4 min until soft. Season.','Stir in tomato paste 1 min, then marinara + Italian seasoning; simmer 20–25 min.','Boil spaghetti to al dente; drain.','Toss pasta with sauce; top with parmesan.','Toss the Caesar just before serving.'],
+ hacks:['Reserve plain buttered noodles + parm for the 4yo (no sauce).'],
+ leftover:'1–1.5 cups sauce left → wife’s lunch over greens, or freeze for a quick pasta night.'},
+{wk:1,day:'Wednesday',title:'Beef Kofta in Tikka Masala over Basmati',cuisine:'Indian (mild)',cal:'~620',prep:'35 min',kid:'Kid: low–medium',beef:true,serves:'~5 adult servings',
+ ing:['Kofta: 1.5 lb ground beef (stash), 1/2 cup breadcrumbs, 1 egg, 3 cloves garlic minced, 1 tbsp grated ginger, 1 tsp garam masala, 1 tsp cumin, 1 tsp salt, 1/4 cup chopped cilantro','1 jar (~400–650 ml) MILD tikka masala simmer sauce','1.5 cups basmati rice (uncooked)','2–4 naan, warmed','Cilantro, to garnish'],
+ steps:['Cook the basmati rice.','Mix all kofta ingredients; roll into ~20 small meatballs (small = faster, lower kid-rejection).','Brown the meatballs in a skillet over medium-high 6–8 min (or bake at 400°F for 15 min).','Pour over the tikka masala sauce; simmer 10 min until meatballs hit 160°F and the sauce is hot.','Serve over rice with warm naan; garnish with cilantro.'],
+ hacks:['Pull 3–4 plain browned meatballs before saucing for the 4yo; serve sauce on the side for dipping.','Use a MILD jar — adults add heat at the table.','Naan is a strong kid-bridge even if they skip the meatballs.']},
+{wk:1,day:'Thursday',title:'Ground Beef Tacos',cuisine:'Tex-Mex',cal:'~600',prep:'25 min',kid:'Kid: low',beef:true,serves:'~5 adult servings',
+ ing:['1.5 lb ground beef (stash)','1 packet taco seasoning (or 1 tbsp chili powder + 1 tsp cumin + 1 tsp paprika + 1/2 tsp garlic powder + 1/2 tsp salt)','1/2 cup water','10–12 small tortillas','1 can beans (black or refried), warmed','Toppings bar: shredded cheddar, coleslaw mix, sour cream, lime wedges, cilantro'],
+ steps:['Brown the beef over medium-high, breaking it up, 7 min; drain fat.','Add taco seasoning + water; simmer 4–5 min until thickened.','Warm the tortillas and beans.','Set out a toppings bar; everyone builds their own.'],
+ hacks:['4yo: plain beef + cheese in a tortilla; slaw on the side as crunchy sticks.'],
+ leftover:'Swapped in from pulled pork (no pork shoulder via delivery). Fast and family-loved.'},
+{wk:1,day:'Friday',title:'Build-Your-Own Pizza Night',cuisine:'Italian',cal:'~820',prep:'40 min',kid:'Kid: low',serves:'3 pizzas (~5 servings)',
+ ing:['3 refrigerated pizza doughs (or 2 family-size)','1 jar (15 oz) pizza sauce','16 oz shredded mozzarella (or shred a block — cheaper, melts better)','Toppings: pepperoni, sliced bell pepper, baby spinach, fresh basil','Side salad: romaine + cherry tomatoes + vinaigrette'],
+ steps:['Heat oven to 475°F with a stone or upside-down sheet pan inside (crispier base).','Stretch each dough on parchment to ~12".','Thin layer of sauce, then cheese, then toppings — kids top their own.','Slide parchment + pizza onto the hot stone; bake 10–12 min until bubbly and golden.','Toss the salad; slice and serve.'],
+ hacks:['Let the 4yo sprinkle their own cheese — instant buy-in.','Use up the week’s leftover peppers and spinach.']},
+{wk:1,day:'Saturday',title:'Korean-Style Ground Beef Bowls',cuisine:'Asian',cal:'~590',prep:'25 min',kid:'Kid: low–medium',beef:true,serves:'~5 adult servings',
+ ing:['1.5 lb ground beef (stash)','1.5 cups jasmine rice (uncooked)','2 carrots, julienned','1 English cucumber, sliced','2 cups broccoli florets (optional)','5 eggs (optional — one fried per bowl)','Sauce: 1/3 cup soy sauce, 1/4 cup brown sugar, 2 tbsp sesame oil, 4 cloves garlic minced, 1 tbsp grated ginger, 1 tsp black pepper','4 green onions sliced; 1 tbsp sesame seeds','For adults: sriracha or gochujang, at the table'],
+ steps:['Cook the rice.','Whisk the sauce.','Brown the beef over medium-high 6–7 min; drain fat.','Add the sauce; cook 2–3 min until glossy.','Optional: steam broccoli 4 min; fry the eggs sunny-side up.','Build bowls: rice, beef, cucumber + carrot on the side, egg on top, garnish.'],
+ hacks:['Keep the kid portion of sauce neutral (no chili); adults add sriracha at the table.','Raw cucumber + carrot beat sauced veg for picky eaters.'],
+ leftover:'Beef + rice → wife’s Korean beef-bowl salad (Sunday lunch).'},
+{wk:1,day:'Sunday',title:'Roast Chicken with Potatoes & Green Beans',cuisine:'Classic',cal:'~640',prep:'90 min (mostly oven)',kid:'Kid: low',serves:'~5 servings + Monday lunch',
+ ing:['1 whole chicken (~5 lb) — or 2 small 3-lb birds for more white meat','2 tbsp softened salted butter','1 lemon halved; 4 cloves garlic smashed; small bunch thyme/rosemary','Salt, pepper, paprika','2 lb baby potatoes, halved; 3 tbsp olive oil','1 lb green beans, trimmed; 2 tbsp salted butter + a squeeze of lemon'],
+ steps:['Heat oven to 425°F. Pat the chicken very dry (key for crispy skin).','Rub all over with softened salted butter, salt, pepper, paprika; stuff the cavity with lemon, garlic, herbs.','Toss potatoes with oil + salt; spread in a roasting pan and set the chicken on top.','Roast 60–75 min until the thigh reads 175°F and juices run clear.','Rest the chicken 10 min before carving.','Last 12 min: steam green beans 4 min, then sauté in salted butter + lemon.'],
+ hacks:['Drumsticks are kid magnets — give them to the little ones.'],
+ leftover:'White meat → Monday lunch wraps. Save the carcass for stock.'},
+/* ---- WEEK 2 ---- */
+{wk:2,day:'Monday',title:'Cottage Pie',cuisine:'British comfort',cal:'~640',prep:'60 min',kid:'Kid: low',beef:true,serves:'~5 servings (big leftovers)',
+ ing:['1.5 lb ground beef (stash)','1 onion diced; 2 carrots diced; 1 cup frozen peas','2 tbsp tomato paste; 1 tbsp Worcestershire; 1 cup beef broth; 1 tsp thyme','Mash: 2.5 lb potatoes peeled & cubed, 1/4 cup milk, 3 tbsp salted butter, 1/2 cup shredded cheddar, salt','1 tbsp olive oil'],
+ steps:['Boil the potatoes in salted water 15–18 min until tender; drain.','Meanwhile brown the beef in oil over medium-high 7 min; drain fat. Add onion + carrot, cook 5 min.','Stir in tomato paste 1 min; add Worcestershire, broth, thyme and peas; simmer 10 min until thickened. Season.','Mash the potatoes with milk, salted butter and salt.','Heat oven to 400°F. Spread beef in a baking dish; top with mash, rough it up with a fork, scatter cheddar.','Bake 20–25 min until golden. Rest 5 min.'],
+ hacks:['Very low risk — it reads to kids as "mashed potato with meat underneath".'],
+ leftover:'Huge yield → Tuesday and Wednesday lunches.'},
+{wk:2,day:'Tuesday',title:'Chicken Stir-Fry + Rice',cuisine:'Asian',cal:'~560',prep:'30 min',kid:'Kid: medium',serves:'~5 adult servings',
+ ing:['1.5 lb chicken breast, thin sliced','1.5 cups jasmine rice (uncooked)','3 cups broccoli florets; 2 bell peppers sliced; 2 carrots sliced','Sauce: 1/3 cup soy sauce, 2 tbsp hoisin, 1 tbsp grated ginger, 3 cloves garlic minced, 1 tbsp cornstarch, 1/2 cup water, 1 tsp sesame oil','2 tbsp neutral oil'],
+ steps:['Cook the rice.','Whisk the sauce.','Heat oil in a wok/large skillet over high. Sear chicken 4–5 min until cooked; remove.','Stir-fry broccoli, peppers and carrots 4–5 min until crisp-tender.','Return chicken; add sauce; toss 1–2 min until glossy and thickened.','Serve over rice.'],
+ hacks:['Reserve plain seared chicken + plain veg + rice for the 4yo before saucing.']},
+{wk:2,day:'Wednesday',title:'Sloppy Joes + Oven Fries',cuisine:'American',cal:'~600',prep:'30 min',kid:'Kid: very low',beef:true,serves:'~5 adult servings',
+ ing:['1.5 lb ground beef (stash)','1 onion diced; 1 bell pepper diced','1 cup tomato sauce; 2 tbsp tomato paste; 1 tbsp brown sugar; 1 tbsp Worcestershire; 1 tsp mustard; salt','8 hamburger buns','Fries: 2 lb potatoes in wedges; 2 tbsp olive oil; salt, pepper, paprika'],
+ steps:['Heat oven to 425°F. Toss potato wedges with oil + seasoning; roast 30–35 min, flipping once.','Brown the beef over medium-high 7 min; drain fat. Add onion + pepper, cook 5 min.','Stir in tomato sauce, paste, brown sugar, Worcestershire and mustard; simmer 8–10 min until thick. Season.','Spoon onto toasted buns; serve with the fries.'],
+ hacks:['One of the easiest kid wins — sweet-savoury and familiar.']},
+{wk:2,day:'Thursday',title:'Slow-Cooker Honey-Garlic Chicken Thighs + Rice',cuisine:'Asian-leaning',cal:'~580',prep:'10 min active',kid:'Kid: low',serves:'~5 adult servings',
+ ing:['2.5 lb boneless chicken thighs (Maple Leaf — not halal)','Sauce: 1/2 cup honey, 1/3 cup soy sauce, 6 cloves garlic minced, 1 tbsp grated ginger, 2 tbsp ketchup, 1 tsp sesame oil','1 tbsp cornstarch + 2 tbsp water (slurry, to finish)','1.5 cups jasmine rice (uncooked); green onion + sesame to garnish'],
+ steps:['Morning: place thighs in the slow cooker; whisk the sauce and pour over. Low 5–6 hrs (or High 3 hrs).','~20 min before serving: cook the rice.','Stir the cornstarch slurry into the cooker; lid off, High 10–15 min to thicken (or reduce the sauce in a pot on the stove).','Serve the thighs + sauce over rice; garnish.'],
+ hacks:['For a sauce-averse 4yo, cook one thigh plain and fully through (175°F) on the stovetop rather than pulling a raw one from the cooker; keep rice as the safe carb.']},
+{wk:2,day:'Friday',title:'Calzone Night',cuisine:'Italian',cal:'~850',prep:'45 min',kid:'Kid: low',serves:'~5 servings',
+ ing:['3 pizza doughs','16 oz shredded mozzarella; 1 cup ricotta (optional)','Pepperoni, diced bell pepper, baby spinach','1 jar marinara (for dipping)','1 egg, beaten (for wash)','Side salad'],
+ steps:['Heat oven to 450°F.','Divide the dough into portions; stretch each into an oval.','Fill one half with cheese + toppings, leaving a border. Fold over and crimp the edges firmly.','Brush with egg wash; cut 2 small steam vents in each.','Bake on parchment 15–18 min until golden.','Serve with warm marinara for dipping + salad.'],
+ hacks:['Same pizza fixings, new shape — keeps the block’s three Fridays from feeling identical.','Kids can fill their own.']},
+{wk:2,day:'Saturday',title:'Smashburgers + Oven Fries',cuisine:'American treat',cal:'~720',prep:'25 min',kid:'Kid: very low',beef:true,serves:'~5 servings',
+ ing:['1.5 lb ground beef (stash), formed into 6–8 loose balls','8 potato buns; cheese slices','Dill spears, lettuce, tomato, sliced onion','Special sauce: 1/4 cup mayo + 2 tbsp ketchup + 1 tbsp relish + 1 tsp mustard','Fries: 2 lb potatoes in wedges; 2 tbsp oil; salt','Salt, pepper'],
+ steps:['Heat oven to 425°F; roast fries 30–35 min.','Heat a cast-iron / heavy pan until screaming hot.','Place a beef ball on the pan; smash flat with a spatula; salt. Sear 2–3 min until a deep crust forms; flip, add cheese, 1 min more.','Toast the buns; build with special sauce + toppings.','Serve with fries.'],
+ hacks:['Build the kids’ plain (just cheese) — it’s treat night, very low risk.']},
+{wk:2,day:'Sunday',title:'Pork Tenderloin Roast',cuisine:'Classic Sunday',cal:'~600',prep:'45 min',kid:'Kid: low',serves:'~5 servings + leftovers',
+ ing:['2 pork tenderloins (~2.5 lb total)','Rub: 1 tbsp Dijon, 2 tbsp olive oil, 3 cloves garlic minced, 1 tsp thyme, 1 tsp rosemary, salt, pepper','2 lb baby potatoes, halved','1 lb green beans, trimmed'],
+ steps:['Heat oven to 425°F. Pat the pork dry; rub with the Dijon-garlic-herb mixture.','Sear the pork in an oven-safe skillet over high 2 min per side until browned.','Toss the potatoes in oil + salt and give them a ~15-min head start in the oven, then nestle the seared pork among them and roast together 18–22 min until the pork hits 145°F.','Rest the pork 5–10 min before slicing.','Steam or roast the green beans alongside; season.'],
+ hacks:['Slice thin; the mild flavour is kid-friendly. Keep extra Dijon on the side.'],
+ leftover:'Sliced pork → sandwiches / next-week lunch.'},
+/* ---- WEEK 3 ---- */
+{wk:3,day:'Monday',title:'Italian Wedding Soup + Crusty Bread',cuisine:'Italian',cal:'~520',prep:'35 min',kid:'Kid: low',beef:true,serves:'~5 servings',
+ ing:['Meatballs: 1.25 lb ground beef (stash), 1/3 cup breadcrumbs, 1 egg, 1/4 cup grated parmesan, 2 cloves garlic minced, 1 tsp Italian seasoning, salt','8 cups chicken broth','1 onion diced; 2 carrots diced; 2 stalks celery diced','1 cup acini di pepe (or orzo)','3 cups baby spinach','Parmesan + crusty bread, to serve'],
+ steps:['Mix the meatball ingredients; roll tiny (marble-size) meatballs.','In a large pot, soften onion, carrot and celery 5 min. Add broth; bring to a simmer.','Drop in the meatballs; simmer 8 min.','Add the pasta; cook 8 min until tender.','Stir in the spinach until wilted; season.','Serve with parmesan + crusty bread.'],
+ hacks:['Tiny meatballs + little pasta = high kid appeal. Serve the 4yo meatballs + pasta with minimal broth.'],
+ leftover:'Keeps well → lunches.'},
+{wk:3,day:'Tuesday',title:'Chicken Quesadillas + Rice & Beans',cuisine:'Tex-Mex',cal:'~760',prep:'30 min',kid:'Kid: low',serves:'~5 servings',
+ ing:['1.5 lb chicken breast, diced (or use leftover chicken)','1 packet taco/fajita seasoning','8 large tortillas; 2.5 cups shredded cheddar','1 bell pepper diced; 1 onion diced','Sides: 1.5 cups rice (dry, ~4.5 cups cooked), 1 can beans (warmed)','Sour cream + salsa, to serve','1 tbsp oil'],
+ steps:['Cook the rice. Sauté chicken in oil with seasoning + peppers + onion 8 min until cooked.','Lay a tortilla on a dry griddle; cheese, chicken mixture, more cheese; top with a second tortilla.','Griddle 2–3 min per side until crisp and melted.','Slice into wedges.','Serve with rice, beans, sour cream and salsa.'],
+ hacks:['Make a plain cheese-only quesadilla for the 4yo.']},
+{wk:3,day:'Wednesday',title:'Chicken Souvlaki Bowls',cuisine:'Mediterranean',cal:'~580',prep:'30 min',kid:'Kid: low',serves:'~5 servings',
+ ing:['1.5 lb chicken breast, cubed','Marinade: 3 tbsp olive oil, juice of 1 lemon, 4 cloves garlic minced, 1 tbsp oregano, salt, pepper','1.5 cups rice (dry, ~4.5 cups cooked) or warm pitas','Tzatziki: 1 cup Greek yogurt + 1/2 cucumber grated & squeezed + 1 clove garlic + 1 tbsp lemon + dill','Toppings: cucumber, cherry tomato, red onion, feta'],
+ steps:['Toss the chicken in the marinade; rest 15 min (or in the morning).','Cook the rice. Stir together the tzatziki.','Sear the chicken in a hot skillet 6–8 min until cooked and charred at the edges.','Build bowls: rice, chicken, toppings on the side, tzatziki spooned over.'],
+ hacks:['Deconstructed-bar format — reserve plain chicken; put feta, onion and tzatziki on the side.'],
+ leftover:'Chicken → wife’s Greek / Mediterranean chicken salad.'},
+{wk:3,day:'Thursday',title:'BBQ Chicken Drumsticks + Corn + Coleslaw',cuisine:'Summer BBQ',cal:'~620',prep:'45 min',kid:'Kid: low',serves:'~5 servings',
+ ing:['3 lb chicken drumsticks (Maple Leaf — not halal)','1 tbsp oil; salt, pepper, 1 tsp paprika','1 cup BBQ sauce','6 ears corn (or frozen cobs)','Slaw: 1 bag coleslaw mix + 1/3 cup coleslaw dressing'],
+ steps:['Heat oven to 425°F. Pat drumsticks dry; toss with oil + salt + pepper + paprika.','Roast on a rack 25 min.','Brush generously with BBQ sauce; roast 12–15 min more until 175°F and sticky.','Boil or grill the corn.','Toss the slaw with dressing just before serving.'],
+ hacks:['Drumsticks are a kid magnet; sauce a few lightly for the little ones.']},
+{wk:3,day:'Friday',title:'Pizza Night',cuisine:'Italian',cal:'~820',prep:'40 min',kid:'Kid: low',serves:'3 pizzas (~5 servings)',
+ ing:['3 pizza doughs; 1 jar pizza sauce; 16 oz shredded mozzarella','Toppings (vary from Week 1): pepperoni, mushroom, red onion, fresh basil','Side salad'],
+ steps:['Heat oven to 475°F with a stone / sheet pan inside.','Stretch the dough on parchment to ~12".','Sauce, cheese, toppings.','Bake 10–12 min until golden.','Toss the salad; slice.'],
+ hacks:['Vary the toppings from Week 1 to keep it fresh. Kids top their own.']},
+{wk:3,day:'Saturday',title:'Beef Tacos (Elevated)',cuisine:'Tex-Mex',cal:'~580',prep:'25 min',kid:'Kid: very low',beef:true,serves:'~5 servings',
+ ing:['1.5 lb ground beef (stash)','1 packet taco seasoning + 1/2 cup water','10–12 tortillas; 1 can beans (warmed)','Quick-brined onion: 1/2 red onion thin-sliced + 1/4 cup lime juice + pinch salt (15 min)','Elevated toppings: queso fresco, avocado, cilantro, lime','Shredded cheddar (for the kids)'],
+ steps:['Quick-brine the red onion (mix and set aside 15 min).','Brown the beef 7 min; drain. Add seasoning + water; simmer 5 min.','Warm the tortillas and beans.','Set out the elevated toppings bar.'],
+ hacks:['Kids get the familiar cheddar version; adults go queso fresco + brined onion + avocado.']},
+{wk:3,day:'Sunday',title:'Roast Chicken (Encore)',cuisine:'Classic',cal:'~640',prep:'90 min (mostly oven)',kid:'Kid: low',serves:'~5 servings + leftovers',
+ ing:['1 whole chicken (~5 lb)','2 tbsp softened salted butter; 1 lemon halved; 4 cloves garlic; herbs; salt, pepper, paprika','2 lb potatoes halved; 2 carrots chunked; 1 lb green beans','3 tbsp olive oil; 2 tbsp salted butter + lemon for the beans'],
+ steps:['Heat oven to 425°F; pat the chicken very dry.','Rub with salted butter + seasoning; stuff the cavity with lemon, garlic, herbs.','Toss potatoes + carrots in oil + salt; set the chicken on top.','Roast 60–75 min to 175°F in the thigh; rest 10 min.','Last 12 min: steam the green beans, then finish in salted butter + lemon.'],
+ hacks:['The proven winner. Swap to roast pork if the family wants a change.'],
+ leftover:'→ Thai / Buffalo / Caprese salads. Save the carcass for stock.'}
+];
+
+const BREAKFAST=[
+ {n:'Classic veggie scramble',m:'8 min · ~380 cal',i:'2 eggs/adult whisked with a splash of milk.',h:'Soft-scramble in butter; fold in spinach + diced tomato + cheddar in the last 30 sec. Toast on the side.'},
+ {n:'Avocado toast + soft-boiled egg',m:'9 min · ~410 cal',i:'Eggs, whole-grain bread, 1/2 avocado/adult.',h:'Soft-boil eggs 6 min; smash avocado on toast with salt, lemon, chili flakes; sliced egg on top.'},
+ {n:'Greek yogurt + granola + berries',m:'3 min · ~410 cal',i:'1 cup yogurt, 1/4 cup granola, 1/2 cup berries, honey.',h:'Layer; microwave frozen berries 20 sec to thaw. Highest protein-per-minute.'},
+ {n:'Smoothie bowl',m:'5 min · ~440 cal',i:'Frozen banana, 1 cup berries, protein scoop, 3/4 cup milk.',h:'Blend thick; top with granola + chia + sliced banana.'},
+ {n:'Cottage cheese power bowl',m:'3 min · ~330 cal',i:'1 cup cottage cheese (2%).',h:'Savoury: tomato + cucumber + olive oil + everything seasoning. Sweet: peach + honey + sunflower seed + cinnamon (nut-free).'},
+ {n:'Overnight oats',m:'Sun prep · ~430 cal',i:'Per jar: 1/2 cup oats, 1/2 cup milk, 2 tbsp yogurt, 1 tbsp chia, 1 tbsp maple.',h:'Stir in a jar, fridge overnight (up to 4 days). Make 4 jars/adult Sunday.'},
+ {n:'Egg muffins / mini frittatas',m:'Sun bake · ~280 cal (2)',i:'12 eggs + 1/2 cup milk + salt; mix-ins (ham, spinach, cheese, pepper).',h:'Pour into a greased muffin tin; bake 350°F 22–25 min. Microwave 2 each morning.'},
+ {n:'Breakfast burritos (freezer)',m:'Sun prep · ~520 cal',i:'12 eggs, pepper, onion, sausage, 8 tortillas, cheese, salsa.',h:'Scramble, fill, foil-wrap, freeze. Microwave 90 sec on a weekday.'},
+ {n:'Pancakes / waffles',m:'Weekend · ~500 cal',i:'Your favourite batter (double it).',h:'Freeze half between parchment; toaster-reheat on weekdays. Topping bar.'},
+ {n:'Breakfast sausage hash',m:'Weekend · ~620 cal',i:'4 potatoes, onion, bell pepper, 1 lb sausage, eggs.',h:'Brown potatoes + onion + pepper 12 min; add sausage 6 min; make wells, crack eggs, lid 4–5 min.'}
+];
+const LUNCH=[
+ {n:'Mediterranean grain bowl',m:'~590 cal',u:'Pantry / fresh',i:'3/4 cup farro/quinoa, 1/2 cup chickpeas, cucumber, cherry tomato, red onion, feta, olives.',h:'Dress with olive oil + lemon + oregano + tahini. Pack dressing separately.'},
+ {n:'Beet, feta & sunflower seed + apple',m:'~540 cal',u:'No leftover needed · nut-free',i:'Arugula, 1 cooked beet, feta, 2 tbsp sunflower seeds, 1/2 apple.',h:'Balsamic + honey + Dijon + olive oil. No cooking. (Nut-free swap for walnut.)'},
+ {n:'Mexican street corn salad',m:'~480 cal',u:'Pantry-driven',i:'1.5 cups corn, 1/2 cup black beans, cotija/feta, red onion, cilantro.',h:'Lime + mayo + chili powder. Add leftover chicken/pork for +protein.'},
+ {n:'Mediterranean kofta bowl',m:'~590 cal',u:'Uses Wed-1 kofta',i:'4–5 kofta, romaine + arugula, rice/chickpeas, cucumber, tomato, feta.',h:'Yogurt + lemon + mint dressing. Cleanly repurposes Wednesday.'},
+ {n:'Asian chicken cabbage slaw',m:'~600 cal',u:'Uses roast chicken · nut-free',i:'Napa + romaine, chicken, shredded carrot, cilantro, green onion, crispy chow mein noodles (check label).',h:'Soy + lime + rice vinegar + ginger + honey + neutral oil + sesame oil. Nut-free (no peanut).'},
+ {n:'Buffalo chicken salad',m:'~520 cal',u:'Uses chicken',i:'Chicken in Frank’s, romaine, celery, blue cheese/feta, carrot.',h:'Ranch or blue-cheese dressing.'},
+ {n:'Korean beef-bowl salad',m:'~620 cal',u:'Uses Sat-1 beef',i:'Beef, romaine + napa, cold rice, cucumber, carrot, optional fried egg.',h:'Soy + rice vinegar + sesame + honey + sesame seeds.'},
+ {n:'Caprese + chicken',m:'~570 cal',u:'Uses roast chicken',i:'Arugula, chicken, cherry tomato, fresh mozzarella, basil.',h:'Olive oil + balsamic glaze. Light and summery.'}
+];
+
+const WK_LABEL={1:'Week 1 · May 25–31',2:'Week 2 · Jun 1–7',3:'Week 3 · Jun 8–14'};
+const area=document.getElementById('dinnerArea');
+let curWk=0;
+DINNERS.forEach(r=>{
+  if(r.wk!==curWk){curWk=r.wk;area.appendChild(E('h2',{class:'wkhead',id:'w'+curWk},[WK_LABEL[curWk]]));}
+  const meta=[E('span',{text:r.cal+' cal'}),E('span',{text:'⏱ '+r.prep}),E('span',{text:r.kid})];
+  if(r.beef)meta.push(E('span',{class:'beef',text:'🥩 stash beef · $0'}));
+  const ingUl=E('ul',{class:'ing'},r.ing.map(x=>E('li',{text:x})));
+  const stepsOl=E('ol',{class:'steps'},r.steps.map(x=>E('li',{text:x})));
+  const left=E('div',{},[E('h4',{text:'Ingredients'}),E('div',{class:'serves',text:r.serves}),ingUl]);
+  const right=E('div',{},[E('h4',{text:'Method'}),stepsOl]);
+  const hackKids=[E('b',{text:'Kid hacks'}),E('ul',{},r.hacks.map(x=>E('li',{text:x})))];
+  const blocks=[
+    E('div',{class:'rhead'},[E('span',{class:'rtag',text:r.day}),E('h3',{text:r.title}),E('span',{class:'serves',text:r.cuisine})]),
+    E('div',{class:'rmeta'},meta),
+    E('div',{class:'rcols'},[left,right]),
+    E('div',{class:'hacks'},hackKids)
+  ];
+  if(r.leftover)blocks.push(E('div',{class:'leftover',text:'↻ '+r.leftover}));
+  area.appendChild(E('article',{class:'recipe'},blocks));
+});
+document.getElementById('bfArea').append(...BREAKFAST.map(x=>E('div',{class:'refcard'},[
+  E('span',{class:'rtag bf',text:'Breakfast'}),E('h4',{text:x.n}),E('div',{class:'m',text:x.m}),E('div',{class:'i',text:x.i}),E('div',{class:'h',text:x.h})
+])));
+document.getElementById('lnArea').append(...LUNCH.map(x=>E('div',{class:'refcard'},[
+  E('span',{class:'rtag ln',text:x.u}),E('h4',{text:x.n}),E('div',{class:'m',text:x.m}),E('div',{class:'i',text:x.i}),E('div',{class:'h',text:x.h})
+])));
+</script>
+</body>
+</html>
