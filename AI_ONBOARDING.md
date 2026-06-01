@@ -49,7 +49,8 @@ Once you have all details:
    - Replace the `SEED_MEALS`, `SEED_INGREDIENTS`, `SEED_BREAKFAST`, and `SEED_LUNCH` variables with the menu you just generated.
    - Modify the default `appState` object to reflect their profile name, adult/kid counts, allergies, dislikes, chosen Sync URL (if using Sheets), and sheet mode.
    - **CRITICAL**: Always update `lastUpdatedByAgent` in the default `appState` to the current epoch timestamp (e.g. `Date.now()`). This triggers the local state-loading merge mechanism on the user's next reload, incorporating their new plan while preserving their rating logs and ticks.
-   - Set image URLs for each recipe using the free keyless template: `https://image.pollinations.ai/prompt/mouthwatering%20[Recipe-Name]%20close%20up%20food%20photography%20natural%20light%20rustic%20ceramic`.
+   - **Image Generation**: If you have a local image generation tool (like `generate_image`, `imagen`, or similar), use it to generate a beautiful, mouthwatering food photograph for each recipe in the menu. Save the generated images inside the `images/` directory (e.g. `images/[mealId].png`) and set the recipe `img` path to point directly to the static asset (e.g. `img: 'images/[mealId].png'`). 
+   - **Image Fallback**: If you do not have local image generation capabilities, set the recipe `img` paths to the free real-time template: `https://image.pollinations.ai/prompt/mouthwatering%20[Recipe-Name]%20close%20up%20food%20photography%20natural%20light%20rustic%20ceramic`.
 
 ---
 
