@@ -3,11 +3,39 @@
 .idea/
 .vscode/
 __pycache__/
+
+# Ignore all Excel tracker sheets
 *.xlsx
 *.xls
-# Ignore local tracking spreadsheets so other users don't overwrite each other's data
-*-Kitchen-Tracker.xlsx
-# Keep the CSV files as templates if desired, or ignore them
-# Meal_Log.csv
-# Deals.csv
-# Ingredient_Prices.csv
+
+# Ignore personal CSV data tables
+Deals.csv
+Ingredient_Prices.csv
+Meal_Log.csv
+
+# Ignore personal recipe schedule files
+3-week-bulk-shopping.md
+HANDOVER.md
+README_PERSONAL.md
+breakfast-rotation.md
+codex-review-log.md
+deals-log.md
+ground-beef-ideas.md
+lunch-salads.md
+price-comparison.md
+walmart-order-list.md
+week-2-candidates.md
+winners.md
+retired.md
+pantry-staples.md
+_tracker.b64
+_build_tracker.py
+_csvgen.py
+
+# Ignore personal weekly directories
+week-2026-05-25/
+week-2026-06-01/
+week-2026-06-08/
+
+# Ignore custom image assets generated for this profile
+images/
