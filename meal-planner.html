@@ -272,7 +272,6 @@
   .hero { height: 160px; position: relative; display: grid; place-items: center; overflow: hidden; }
   .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: var(--transition); }
   .card:hover .hero-img { transform: scale(1.05); }
-  .hero .emoji { font-size: 64px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); z-index: 2; }
   .hero::after {
     content: ""; position: absolute; inset: 0; z-index: 2;
     background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 40%, rgba(0,0,0,0.5) 100%);
@@ -290,7 +289,8 @@
 
   /* Card Body */
   .card-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }
-  .card h3 { font-size: 22px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; margin-bottom: 8px; }
+  .card h3 { font-size: 22px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; margin-bottom: 8px; display: flex; align-items: center; }
+  .card-emoji { font-size: 24px; margin-right: 8px; display: inline-block; vertical-align: middle; }
   .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
   .badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; background: var(--paper-2); color: var(--ink-soft); border: 1px solid var(--line); }
   .badge.cal { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
@@ -716,16 +716,16 @@
 // Seed plan if the user hasn't generated anything yet
 const SEED_INGREDIENTS = {
   beef:{n:'Ground beef (≈12 lb, 8 meals)',c:'Protein',p:0,sub:'from freezer stash',stash:true},
-  cbreast:{n:'Chicken breast ×2 packs',c:'Protein',p:48.38,sub:'Maple Leaf value pack'},
-  cthigh:{n:'Boneless chicken thighs',c:'Protein',p:14.21,sub:'Maple Leaf · not halal'},
-  cdrum:{n:'Chicken drumsticks',c:'Protein',p:14.81,sub:'Maple Leaf · not halal'},
-  cwhole:{n:'Whole chicken ×2',c:'Protein',p:38.56,sub:'two Sunday roasts'},
-  ptender:{n:'Pork tenderloin ×2',c:'Protein',p:20.76,sub:'Maple Leaf'},
-  eggs:{n:'Eggs ×2 (60 ct)',c:'Dairy & Eggs',p:20.54,sub:'Great Value',always:true},
-  milk:{n:'Milk 3% 4L ×2',c:'Dairy & Eggs',p:13.00,sub:'Dairyland',always:true},
-  cheddar:{n:'Cheddar block ×2',c:'Dairy & Eggs',p:10.96,sub:'Great Value'},
-  mozz:{n:'Mozzarella block ×2',c:'Dairy & Eggs',p:10.96,sub:'Great Value'},
-  oil:{n:'Olive oil',c:'Pantry Staples',p:6.00,have:true},
+  cbreast:{n:'Chicken breast ×2 packs',c:'Protein',p:0,sub:'Maple Leaf value pack'},
+  cthigh:{n:'Boneless chicken thighs',c:'Protein',p:0,sub:'Maple Leaf · not halal'},
+  cdrum:{n:'Chicken drumsticks',c:'Protein',p:0,sub:'Maple Leaf · not halal'},
+  cwhole:{n:'Whole chicken ×2',c:'Protein',p:0,sub:'two Sunday roasts'},
+  ptender:{n:'Pork tenderloin ×2',c:'Protein',p:0,sub:'Maple Leaf'},
+  eggs:{n:'Eggs ×2 (60 ct)',c:'Dairy & Eggs',p:0,sub:'Great Value',always:true},
+  milk:{n:'Milk 3% 4L ×2',c:'Dairy & Eggs',p:0,sub:'Dairyland',always:true},
+  cheddar:{n:'Cheddar block ×2',c:'Dairy & Eggs',p:0,sub:'Great Value'},
+  mozz:{n:'Mozzarella block ×2',c:'Dairy & Eggs',p:0,sub:'Great Value'},
+  oil:{n:'Olive oil',c:'Pantry Staples',p:0,have:true},
   spices:{n:'Spice rack (cumin, paprika, oregano…)',c:'Pantry Staples',p:0,have:true,stash:true}
 };
 
@@ -1104,11 +1104,10 @@ function renderMeals() {
         <span class="daytag">${escapeHTML(m.day)}</span>
         <span class="cuisinetag">${escapeHTML(CUISINE_LABELS[m.cu] || m.cu)}</span>
         <img class="hero-img" src="${imgUrl}" alt="${escapeHTML(m.n)}" onerror="this.style.display='none'">
-        <span class="emoji" style="z-index:2">${escapeHTML(m.e || '🍽️')}</span>
         <button class="${heartClass}" onclick="toggleFav('${m.id}')">${heartText}</button>
       </div>
       <div class="card-body">
-        <h3>${escapeHTML(m.n)}</h3>
+        <h3><span class="card-emoji">${escapeHTML(m.e || '🍽️')}</span> ${escapeHTML(m.n)}</h3>
         <div class="badges">
           <span class="badge cal">${escapeHTML(String(m.cal))} cal</span>
           <span class="badge">⏱ ${escapeHTML(m.prep)}</span>
