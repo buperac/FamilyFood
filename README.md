@@ -10,13 +10,13 @@ The public app intentionally starts clean: no starter meals, ingredient quantiti
 
 - Builds weekly breakfast, lunch, and dinner plans from your family profile.
 - Supports bring-your-own API keys for Google Gemini, Anthropic Claude, OpenAI, or xAI Grok.
-- Tracks allergies, dislikes, favorite meals, adult count, and child count.
+- Tracks allergies, dislikes, favorite meals, food preferences, adult count, child count, and child age/appetite notes.
 - Calculates the active grocery list from planned meals, skipped meals, and pantry ticks.
 - Logs ratings, notes, favourites, cooked dates, estimated costs, and actual costs.
 - Syncs with Google Sheets through a user-deployed Apps Script web app.
 - Imports and exports Excel workbooks in the browser.
 - Generates grocery helper payloads and experimental browser-console scripts for Walmart.ca, Costco Same-Day, and Instacart.
-- Uses Pollinations.ai for keyless recipe images, with optional OpenAI image generation through the local proxy.
+- Uses Pollinations.ai for keyless recipe images, optional OpenAI image generation through the local proxy, or icon-only meal cards when image generation is not wanted.
 
 ## Current Shape
 
@@ -58,12 +58,14 @@ http://localhost:8765
 
 4. Complete Setup / Settings:
 
-- Add household size.
-- Add allergies and dislikes.
-- Choose meal scopes.
-- Add your model provider and API key.
-- Choose Google Sheets or local Excel mode.
-- Generate the first week in the app, or ask your coding agent to populate the first household-specific plan.
+- Start with the guided setup panel.
+- Choose local Excel mode for the first run unless you already want Google Sheets.
+- Add household size, child ages/appetite notes, allergies, dislikes, preferences, and meals the family already likes.
+- Choose meal scopes: breakfast, lunch, dinner, or any combination.
+- Add your model provider and API key, or copy the agent prompt and have an AI assistant populate the first plan.
+- Choose recipe images or icon-only cards.
+- Choose manual shopping-list handoff first; use helper scripts only after reviewing the plan.
+- Generate the first week, then swap, skip, rate, and export when it looks right.
 
 Gemini may also work from a static host because the app has a direct Gemini fallback. OpenAI, Anthropic, Grok, and OpenAI image generation need `server.py`.
 

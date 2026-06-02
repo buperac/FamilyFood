@@ -2,7 +2,7 @@
 
 These instructions are for AI coding agents helping a user set up or customize FamilyFood.
 
-FamilyFood is a local-first family meal planner. Keep setup practical: profile, meal scope, sync mode, API provider, starter plan, and verification. Do not expand into hosted accounts, SaaS features, payments, or new integrations unless the user explicitly asks.
+FamilyFood is a local-first family meal planner. Keep setup practical: tracking mode, household intake, meal scope, AI/image mode, shopping handoff, starter plan, and verification. Do not expand into hosted accounts, SaaS features, payments, browser checkout, or new integrations unless the user explicitly asks.
 
 ## Hard Rules
 
@@ -10,10 +10,13 @@ FamilyFood is a local-first family meal planner. Keep setup practical: profile, 
 - Do not complete grocery checkout or payment.
 - Do not bypass CAPTCHA, identity checks, or store anti-bot screens.
 - Do not hard-code one household's allergies, dislikes, brands, stores, or freezer inventory as product defaults.
+- Do not create standalone workbook, JSON, or import-script artifacts as the first response unless the user explicitly asked for files. First walk the user through the setup questions or use the app's guided setup state.
 - Keep the public repo defaults clean: no starter meals, ingredient quantities, prices, pantry ownership, brands, or printable recipes.
 - Keep claims in README and UI aligned with implemented behavior.
 
 ## Step 1: Choose Storage Mode
+
+Default to Local Excel mode for the first run unless the user asks for Google Sheets.
 
 Ask whether the user wants:
 
@@ -40,11 +43,13 @@ Ask only for the details needed to make the first usable plan:
 1. Household name or display name.
 2. Number of adults and children.
 3. Ages or appetite notes for children, if relevant.
-4. Allergies.
-5. Dislikes and exclusions.
-6. Meals to plan: breakfast, lunch, dinner, or any combination.
-7. Three to five meals the family already likes.
-8. Budget or store preference, if grocery planning matters.
+4. Food preferences or cooking style.
+5. Allergies.
+6. Dislikes and exclusions.
+7. Meals to plan: breakfast, lunch, dinner, or any combination.
+8. Three to five meals the family already likes.
+9. Budget or store preference, if grocery planning matters.
+10. Shopping handoff preference: manual list/cart JSON first, or experimental browser helper scripts.
 
 ## Step 3: Generate A Starter Plan
 
@@ -56,6 +61,8 @@ Build a 7-day plan that follows the user's rules:
 - Keep weeknight meals realistic.
 - Include kid-facing mitigation notes when needed.
 - Estimate prices honestly and label them as estimates.
+- Use recipe images only when an image provider is configured; otherwise keep icon-only meal cards acceptable.
+- Keep shopping output as a manual-review list, cart JSON, or helper script. Do not imply browser control can safely complete checkout.
 
 If editing `meal-planner.html` directly for a user-specific instance:
 

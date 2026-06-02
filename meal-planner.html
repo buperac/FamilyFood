@@ -433,6 +433,83 @@
   footer { border-top: 2px solid var(--ink); padding: 40px 0 80px; color: var(--ink-soft); font-size: 14px; text-align: center; }
   
   .hide { display: none !important; }
+
+  /* First-run guide */
+  .setup-guide {
+    margin-top: 34px;
+    padding: 28px;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--border-radius);
+    background: linear-gradient(135deg, var(--card) 0%, var(--paper-2) 100%);
+    box-shadow: 0 8px 22px var(--shadow);
+  }
+  .setup-guide.complete { display: none; }
+  .setup-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+    gap: 28px;
+    align-items: start;
+  }
+  .setup-guide h2 {
+    font-size: clamp(26px, 4vw, 42px);
+    line-height: 1.05;
+    margin: 6px 0 10px;
+  }
+  .setup-guide p { color: var(--ink-soft); font-size: 15px; max-width: 680px; }
+  .setup-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .setup-checklist {
+    display: grid;
+    gap: 10px;
+  }
+  .setup-item {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 12px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .setup-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 1.5px solid var(--line);
+    color: var(--ink-soft);
+    font-weight: 800;
+    font-size: 13px;
+  }
+  .setup-item.done .setup-mark {
+    background: var(--herb);
+    border-color: var(--herb);
+    color: #fff;
+  }
+  .setup-item strong { display: block; font-size: 14px; }
+  .setup-item small { display: block; color: var(--ink-soft); font-size: 12px; margin-top: 2px; }
+  .help-note {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 10px;
+  }
+  .form-help { font-size: 12px; color: var(--ink-soft); margin-top: 6px; }
+  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hero-icon {
+    position: relative;
+    z-index: 3;
+    font-size: 58px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,.18));
+  }
+  @media(max-width:850px) {
+    .setup-layout { grid-template-columns: 1fr; }
+    .option-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -477,6 +554,30 @@
 </header>
 
 <main class="wrap">
+
+  <!-- First-run guided setup -->
+  <section id="setupGuide" class="setup-guide">
+    <div class="setup-layout">
+      <div>
+        <div class="eyebrow">Start here</div>
+        <h2>Build the first menu before touching the grocery list.</h2>
+        <p>
+          FamilyFood starts blank on purpose. Walk through tracking mode, household size, children, allergies, food preferences, AI/image setup, and shopping preference before generating meals.
+        </p>
+        <div class="setup-actions">
+          <button class="btn primary" id="openGuideBtn" type="button">Start guided setup</button>
+          <button class="btn green" id="guideGenerateBtn" type="button">Generate weekly plan</button>
+          <button class="btn" id="copySetupPromptBtn" type="button">Copy agent prompt</button>
+        </div>
+        <div class="help-note">
+          Recommended first run: Local Excel mode, list-only grocery output, then manually review prices and substitutions. Use Google Sheets or browser helper scripts only after the plan is sane.
+        </div>
+      </div>
+      <div class="setup-checklist" id="setupChecklist">
+        <!-- Rendered from setup state -->
+      </div>
+    </div>
+  </section>
   
   <!-- Meal planning section -->
   <section id="dinners">
@@ -587,12 +688,37 @@
     </div>
     <div class="modal-body">
       
-      <!-- STEP 1: Profile -->
+      <!-- STEP 1: Household -->
       <div class="wizard-step active" id="step1">
-        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">1. Personalization Profile</h4>
+        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">1. Tracking mode and household</h4>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">
+          Local Excel is the recommended first run. Google Sheets is optional if you want a shared spreadsheet log.
+        </p>
         <div class="form-group">
-          <label for="profName">Your Name</label>
-          <input type="text" class="form-control" id="profName" placeholder="e.g. Alex Morgan">
+          <label for="sheetMode">Tracking Mode</label>
+          <select class="form-control" id="sheetMode" onchange="adjustSheetUI()">
+            <option value="excel">Local Excel mode (recommended first run)</option>
+            <option value="sheets">Google Sheets sync (optional)</option>
+          </select>
+        </div>
+
+        <div id="excelSyncGroup" class="help-note">
+          Excel mode works offline. Generate the first plan, then use Export Excel to save meals, prices, ratings, and notes.
+        </div>
+
+        <div id="sheetsSyncGroup" class="hide">
+          <div class="form-group">
+            <label for="sheetUrl">Google Apps Script Web App URL</label>
+            <input type="url" class="form-control" id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec">
+            <p class="form-help">
+              Create your own Google Sheet, paste <a href="google-apps-script.js" target="_blank" style="color:var(--terra);">google-apps-script.js</a> into Apps Script, deploy as a Web App, then paste the URL here. Check the sheet after first sync.
+            </p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="profName">Household or first name</label>
+          <input type="text" class="form-control" id="profName" placeholder="e.g. Family, Smiths, or Alex">
         </div>
         <div class="form-inline">
           <div class="form-group">
@@ -601,29 +727,38 @@
           </div>
           <div class="form-group">
             <label for="profKids">Number of Children</label>
-            <input type="number" class="form-control" id="profKids" value="4" min="0">
+            <input type="number" class="form-control" id="profKids" value="0" min="0">
           </div>
         </div>
         <div class="form-group">
-          <label for="profFavoriteMeals">Favorite Meals (Suggestions/Inspiration)</label>
-          <textarea class="form-control" id="profFavoriteMeals" rows="3" placeholder="e.g. Tacos, Roast Chicken, Spaghetti Bolognese, Butter Chicken"></textarea>
+          <label for="profKidAges">Children ages / appetite notes</label>
+          <textarea class="form-control" id="profKidAges" rows="3" placeholder="e.g. 4 and 7; one toddler portion, one hockey-practice appetite, no school lunches on Friday"></textarea>
+          <p class="form-help">Use plain language. The model needs age and appetite more than perfect calorie math.</p>
+        </div>
+        <div class="form-group">
+          <label for="profFavoriteMeals">Meals the family already likes</label>
+          <textarea class="form-control" id="profFavoriteMeals" rows="3" placeholder="e.g. Tacos, roast chicken, spaghetti, butter chicken"></textarea>
         </div>
       </div>
 
       <!-- STEP 2: Dietary Details -->
       <div class="wizard-step" id="step2">
-        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">2. Dietary Guidelines & Restrictions</h4>
+        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">2. Food rules and meal scope</h4>
         <div class="form-group">
-          <label for="profAllergies">Allergies (Excludes matching ingredients)</label>
-          <input type="text" class="form-control" id="profAllergies" placeholder="e.g. Peanuts, Tree nuts, Shellfish">
+          <label for="profPreferences">Food preferences / cooking style</label>
+          <textarea class="form-control" id="profPreferences" rows="3" placeholder="e.g. quick weeknights, higher protein, prairie comfort food, lower waste, leftovers for lunch"></textarea>
         </div>
         <div class="form-group">
-          <label for="profDislikes">Dislikes / Exclusions</label>
+          <label for="profAllergies">Allergies (excludes matching ingredients)</label>
+          <input type="text" class="form-control" id="profAllergies" placeholder="e.g. Peanuts, tree nuts, shellfish">
+        </div>
+        <div class="form-group">
+          <label for="profDislikes">Dislikes / exclusions</label>
           <input type="text" class="form-control" id="profDislikes" placeholder="e.g. Pork, seafood, very spicy food, pickles">
         </div>
         <div class="form-group">
-          <label>Meals to Include in Planning</label>
-          <div style="display:flex; gap:16px; margin-top:8px;">
+          <label>Meals to include in planning</label>
+          <div style="display:flex; gap:16px; margin-top:8px; flex-wrap:wrap;">
             <label class="chk-label"><input type="checkbox" class="chk" id="planBreakfast" checked> Breakfast</label>
             <label class="chk-label"><input type="checkbox" class="chk" id="planLunch" checked> Lunch</label>
             <label class="chk-label"><input type="checkbox" class="chk" id="planDinner" checked> Supper / Dinner</label>
@@ -633,7 +768,7 @@
 
       <!-- STEP 3: API Connections -->
       <div class="wizard-step" id="step3">
-        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">3. Choose Your AI Brain</h4>
+        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">3. Choose the meal-planning AI</h4>
         <p style="font-size:13px; color:var(--ink-soft); margin-bottom:10px;">Configure the LLM engine to generate meals. Direct Gemini calls bypass CORS, while other engines route safely through the local `server.py` proxy.</p>
         <p style="font-size:12px; color:var(--herb); font-weight:600; margin-bottom:14px; padding:8px; background:rgba(86,120,73,0.08); border-radius:6px; border:1px solid rgba(86,120,73,0.2);">
           💡 <b>AI Agent Setup Option:</b> If you run this in an AI agent workspace (like Antigravity, Claude Code, or Codex), you don't need browser API keys! The agent can run setup dynamically in the terminal and write your customized plan directly into this file.
@@ -665,6 +800,7 @@
           <select class="form-control" id="imageGenProvider" onchange="toggleImageKeyUI()">
             <option value="pollinations">Pollinations.ai (Free, Fast, Keyless)</option>
             <option value="openai">DALL-E 3 (Requires OpenAI Key)</option>
+            <option value="icons">Icon only (no image requests)</option>
           </select>
         </div>
 
@@ -674,32 +810,30 @@
         </div>
       </div>
 
-      <!-- STEP 4: Spreadsheet Connectors -->
+      <!-- STEP 4: Shopping -->
       <div class="wizard-step" id="step4">
-        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">4. Sync Integrations</h4>
-        
-        <div class="form-group">
-          <label for="sheetMode">Storage Sync Mode</label>
-          <select class="form-control" id="sheetMode" onchange="adjustSheetUI()">
-            <option value="sheets">Google Sheets Sync (Real-time Web App)</option>
-            <option value="excel">Local Excel Upload/Download Mode</option>
-          </select>
-        </div>
+        <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">4. Shopping handoff</h4>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom:14px;">
+          First run should produce a grocery list you can inspect. Browser helper scripts are experimental and never complete checkout or payment.
+        </p>
 
-        <div id="sheetsSyncGroup">
+        <div class="form-inline">
           <div class="form-group">
-            <label for="sheetUrl">Google Apps Script Web App URL</label>
-            <input type="url" class="form-control" id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec">
-            <p style="font-size:12px; color:var(--ink-soft); margin-top:6px;">
-              Copy-paste the deployed Apps Script URL. The app will sync your ratings and logs automatically. Code template resides in <a href="google-apps-script.js" target="_blank" style="color:var(--terra);">google-apps-script.js</a>.
-            </p>
+            <label for="shopStore">Preferred store or shopping route</label>
+            <input type="text" class="form-control" id="shopStore" placeholder="e.g. Walmart, Costco, local grocer">
+          </div>
+          <div class="form-group">
+            <label for="shopBudget">Weekly budget target</label>
+            <input type="text" class="form-control" id="shopBudget" placeholder="e.g. about $180 CAD">
           </div>
         </div>
-
-        <div id="excelSyncGroup" class="hide">
-          <p style="font-size:13px; color:var(--ink-soft);">
-            Excel Mode works offline. You can upload any existing `.xlsx` file to parse and seed your ingredients and ratings, or download a compiled spreadsheet after editing.
-          </p>
+        <div class="form-group">
+          <label for="shoppingMode">How should the list be handed off?</label>
+          <select class="form-control" id="shoppingMode">
+            <option value="list">Manual list / cart JSON first (recommended)</option>
+            <option value="helper">Experimental browser helper scripts</option>
+          </select>
+          <p class="form-help">Both modes require manual review of item sizes, prices, substitutions, delivery details, and checkout.</p>
         </div>
       </div>
 
@@ -726,6 +860,8 @@ let appState = {
     name: '',
     adults: 2,
     kids: 0,
+    kidAges: '',
+    preferences: '',
     favoriteMeals: '',
     allergies: '',
     dislikes: '',
@@ -741,8 +877,13 @@ let appState = {
     imageKey: ''
   },
   sheets: {
-    mode: 'sheets',
+    mode: 'excel',
     url: ''
+  },
+  shopping: {
+    store: '',
+    budget: '',
+    mode: 'list'
   },
   theme: 'light',
   meals: SEED_MEALS,
@@ -769,12 +910,15 @@ const shoppingArea = document.getElementById('shoppingArea');
 const breakfastGrid = document.getElementById('breakfastGrid');
 const lunchGrid = document.getElementById('lunchGrid');
 const profileBadgeStrip = document.getElementById('profileBadgeStrip');
+const setupGuide = document.getElementById('setupGuide');
+const setupChecklist = document.getElementById('setupChecklist');
 
 /* ---------- INITIALIZE ---------- */
 window.onload = function() {
   loadState();
   applyTheme();
   renderProfileStrip();
+  renderSetupGuide();
   renderMeals();
   renderShoppingList();
   renderReferences();
@@ -861,7 +1005,17 @@ function loadState() {
       if (!appState.cooked) appState.cooked = {};
       if (!appState.actualCost) appState.actualCost = {};
       if (!appState.api) appState.api = { provider: 'gemini', model: 'gemini-2.5-flash', key: '', imageGen: 'pollinations', imageKey: '' };
+      if (!appState.api.imageGen) appState.api.imageGen = 'pollinations';
       if (!appState.api.imageKey) appState.api.imageKey = '';
+      if (!appState.profile) appState.profile = {};
+      if (appState.profile.kidAges === undefined) appState.profile.kidAges = '';
+      if (appState.profile.preferences === undefined) appState.profile.preferences = '';
+      if (!appState.sheets) appState.sheets = { mode: 'excel', url: '' };
+      if (!appState.sheets.mode) appState.sheets.mode = 'excel';
+      if (!appState.shopping) appState.shopping = { store: '', budget: '', mode: 'list' };
+      if (appState.shopping.store === undefined) appState.shopping.store = '';
+      if (appState.shopping.budget === undefined) appState.shopping.budget = '';
+      if (appState.shopping.mode === undefined) appState.shopping.mode = 'list';
     } catch (e) {
       console.error("Error reading localStorage state", e);
     }
@@ -898,6 +1052,9 @@ function closeModal() {
 }
 
 document.getElementById('openSettingsBtn').onclick = openModal;
+document.getElementById('openGuideBtn').onclick = openModal;
+document.getElementById('guideGenerateBtn').onclick = () => document.getElementById('generatePlanBtn').click();
+document.getElementById('copySetupPromptBtn').onclick = copySetupPrompt;
 
 function showStep(step) {
   for (let i = 1; i <= totalSteps; i++) {
@@ -905,7 +1062,7 @@ function showStep(step) {
   }
   document.getElementById('prevStepBtn').classList.toggle('hide', step === 1);
   document.getElementById('nextStepBtn').textContent = step === totalSteps ? 'Save & Close' : 'Next';
-  document.getElementById('wizardTitle').textContent = `Configuration — Step ${step} of ${totalSteps}`;
+  document.getElementById('wizardTitle').textContent = `Configuration - Step ${step} of ${totalSteps}`;
 }
 
 function nextStep() {
@@ -916,6 +1073,7 @@ function nextStep() {
     saveFormToState();
     closeModal();
     renderProfileStrip();
+    renderSetupGuide();
     renderMeals();
     renderShoppingList();
     renderReferences();
@@ -957,8 +1115,10 @@ function fillFormFromState() {
   document.getElementById('profName').value = appState.profile.name;
   document.getElementById('profAdults').value = appState.profile.adults;
   document.getElementById('profKids').value = appState.profile.kids;
+  document.getElementById('profKidAges').value = appState.profile.kidAges || '';
   document.getElementById('profFavoriteMeals').value = appState.profile.favoriteMeals;
   // Step 2
+  document.getElementById('profPreferences').value = appState.profile.preferences || '';
   document.getElementById('profAllergies').value = appState.profile.allergies;
   document.getElementById('profDislikes').value = appState.profile.dislikes;
   document.getElementById('planBreakfast').checked = appState.profile.planBreakfast;
@@ -973,6 +1133,9 @@ function fillFormFromState() {
   // Step 4
   document.getElementById('sheetMode').value = appState.sheets.mode;
   document.getElementById('sheetUrl').value = appState.sheets.url;
+  document.getElementById('shopStore').value = appState.shopping?.store || '';
+  document.getElementById('shopBudget').value = appState.shopping?.budget || '';
+  document.getElementById('shoppingMode').value = appState.shopping?.mode || 'list';
   
   adjustSheetUI();
   toggleImageKeyUI();
@@ -983,8 +1146,10 @@ function saveFormToState() {
   appState.profile.name = document.getElementById('profName').value;
   appState.profile.adults = parseInt(document.getElementById('profAdults').value) || 2;
   appState.profile.kids = parseInt(document.getElementById('profKids').value) || 0;
+  appState.profile.kidAges = document.getElementById('profKidAges').value;
   appState.profile.favoriteMeals = document.getElementById('profFavoriteMeals').value;
   // Step 2
+  appState.profile.preferences = document.getElementById('profPreferences').value;
   appState.profile.allergies = document.getElementById('profAllergies').value;
   appState.profile.dislikes = document.getElementById('profDislikes').value;
   appState.profile.planBreakfast = document.getElementById('planBreakfast').checked;
@@ -999,6 +1164,10 @@ function saveFormToState() {
   // Step 4
   appState.sheets.mode = document.getElementById('sheetMode').value;
   appState.sheets.url = document.getElementById('sheetUrl').value;
+  if (!appState.shopping) appState.shopping = {};
+  appState.shopping.store = document.getElementById('shopStore').value;
+  appState.shopping.budget = document.getElementById('shopBudget').value;
+  appState.shopping.mode = document.getElementById('shoppingMode').value;
   
   saveState();
 }
@@ -1014,6 +1183,9 @@ function renderProfileStrip() {
   
   if (appState.profile.allergies) chips.push(`🚫🥜 <b>Allergies:</b> ${escapeHTML(appState.profile.allergies)}`);
   if (appState.profile.dislikes) chips.push(`⚠️ <b>Excludes:</b> ${escapeHTML(appState.profile.dislikes)}`);
+  if (appState.profile.kidAges) chips.push(`<b>Child notes:</b> ${escapeHTML(appState.profile.kidAges)}`);
+  if (appState.profile.preferences) chips.push(`<b>Style:</b> ${escapeHTML(appState.profile.preferences)}`);
+  if (appState.shopping && appState.shopping.store) chips.push(`<b>Store:</b> ${escapeHTML(appState.shopping.store)}`);
   
   chips.forEach(html => {
     const el = document.createElement('span');
@@ -1026,6 +1198,88 @@ function renderProfileStrip() {
   document.getElementById('breakfastSection').classList.toggle('hide', !appState.profile.planBreakfast);
   document.getElementById('lunchSection').classList.toggle('hide', !appState.profile.planLunch);
   document.getElementById('dinners').classList.toggle('hide', !appState.profile.planDinner);
+}
+
+function renderSetupGuide() {
+  if (!setupGuide || !setupChecklist) return;
+  const hasPlan = appState.meals && appState.meals.length > 0;
+  setupGuide.classList.toggle('complete', hasPlan);
+  if (hasPlan) return;
+
+  const trackingReady = appState.sheets.mode === 'excel' || !!appState.sheets.url;
+  const householdReady = !!appState.profile.name && ((appState.profile.adults || 0) + (appState.profile.kids || 0)) > 0;
+  const foodReviewed = !!(appState.profile.preferences || appState.profile.favoriteMeals || appState.profile.allergies || appState.profile.dislikes);
+  const aiReady = !!appState.api.key;
+  const shoppingReady = !!(appState.shopping && appState.shopping.mode);
+
+  const items = [
+    {
+      done: trackingReady,
+      title: 'Tracking mode',
+      detail: appState.sheets.mode === 'excel' ? 'Local Excel selected.' : (appState.sheets.url ? 'Google Sheets URL saved.' : 'Choose Excel or add a Sheets URL.')
+    },
+    {
+      done: householdReady,
+      title: 'Household',
+      detail: householdReady ? `${appState.profile.adults} adult(s), ${appState.profile.kids} child(ren).` : 'Add household name, adults, children, and age notes.'
+    },
+    {
+      done: foodReviewed,
+      title: 'Food rules',
+      detail: foodReviewed ? 'Preferences, favourites, allergies, or exclusions entered.' : 'Add allergies, dislikes, favourites, and cooking style.'
+    },
+    {
+      done: aiReady,
+      title: 'AI generator',
+      detail: aiReady ? `${appState.api.provider} configured.` : 'Add an API key or copy the agent prompt.'
+    },
+    {
+      done: shoppingReady,
+      title: 'Shopping handoff',
+      detail: appState.shopping?.mode === 'helper' ? 'Experimental helper scripts selected.' : 'Manual list / cart JSON selected.'
+    }
+  ];
+
+  setupChecklist.innerHTML = items.map((item, idx) => `
+    <div class="setup-item ${item.done ? 'done' : ''}">
+      <span class="setup-mark">${item.done ? 'OK' : idx + 1}</span>
+      <span><strong>${escapeHTML(item.title)}</strong><small>${escapeHTML(item.detail)}</small></span>
+    </div>
+  `).join('');
+}
+
+function buildAgentSetupPrompt() {
+  return `I am setting up FamilyFood from https://github.com/buperac/FamilyFood.
+
+Goal: walk me through a first-run setup, then create an app-compatible first-week meal plan. Do not create standalone sandbox files unless I explicitly ask. Do not preload public repo defaults with private household data. Keep the plan compatible with localStorage key meal-planner-v2-state.
+
+Current household answers:
+- Household/name: ${appState.profile.name || '[ask me]'}
+- Adults: ${appState.profile.adults || 2}
+- Children: ${appState.profile.kids || 0}
+- Children ages/appetite notes: ${appState.profile.kidAges || '[ask me if children > 0]'}
+- Food preferences/cooking style: ${appState.profile.preferences || '[ask me]'}
+- Allergies: ${appState.profile.allergies || 'none entered'}
+- Dislikes/exclusions: ${appState.profile.dislikes || 'none entered'}
+- Meals to plan: breakfast=${appState.profile.planBreakfast}, lunch=${appState.profile.planLunch}, dinner=${appState.profile.planDinner}
+- Meals we already like: ${appState.profile.favoriteMeals || '[ask me]'}
+- Tracking mode: ${appState.sheets.mode || 'excel'}
+- Preferred store: ${appState.shopping?.store || '[ask me if shopping list matters]'}
+- Weekly budget target: ${appState.shopping?.budget || '[ask me if budget matters]'}
+- Shopping handoff: ${appState.shopping?.mode || 'list'}
+
+If required details are missing, ask concise setup questions first. Once ready, return a plan with meals, ingredients, breakfast, and lunch objects that match the FamilyFood app structure. Use estimated prices only, label them as estimates, avoid allergens/exclusions, include child-friendly mitigation notes when useful, and keep grocery shopping as a manual-review list or helper-script payload only.`;
+}
+
+function copySetupPrompt() {
+  const text = buildAgentSetupPrompt();
+  if (!navigator.clipboard) {
+    window.prompt("Copy this agent setup prompt:", text);
+    return;
+  }
+  navigator.clipboard.writeText(text)
+    .then(() => alert("Agent setup prompt copied. Paste it into ChatGPT, Claude, Codex, or another assistant."))
+    .catch(() => window.prompt("Copy this agent setup prompt:", text));
 }
 
 /* ---------- RENDERING ENGINE ---------- */
@@ -1071,14 +1325,18 @@ function renderMeals() {
     const heartClass = `fav ${isFaved ? 'on' : ''}`;
     const heartText = isFaved ? '♥' : '♡';
     
-    // Hero image tag or default
+    // Hero image tag or icon fallback.
+    const useImage = appState.api.imageGen !== 'icons';
     const imgUrl = m.img || `https://image.pollinations.ai/prompt/mouthwatering%20${encodeURIComponent(m.n)}%20close%20up%20food%20photography%20natural%20light%20rustic%20ceramic`;
+    const heroMedia = useImage
+      ? `<img class="hero-img" src="${imgUrl}" alt="${escapeHTML(m.n)}" onerror="this.style.display='none'">`
+      : `<span class="hero-icon" aria-hidden="true">${escapeHTML(m.e || 'Meal')}</span>`;
     
     card.innerHTML = `
       <div class="hero" style="background: ${cardColor}">
         <span class="daytag">${escapeHTML(m.day)}</span>
         <span class="cuisinetag">${escapeHTML(CUISINE_LABELS[m.cu] || m.cu)}</span>
-        <img class="hero-img" src="${imgUrl}" alt="${escapeHTML(m.n)}" onerror="this.style.display='none'">
+        ${heroMedia}
         <button class="${heartClass}" onclick="toggleFav('${m.id}')">${heartText}</button>
       </div>
       <div class="card-body">
@@ -1565,10 +1823,15 @@ document.getElementById('generatePlanBtn').onclick = async () => {
     - Name: ${appState.profile.name}
     - Adults count: ${appState.profile.adults}
     - Children count: ${appState.profile.kids}
+    - Children ages and appetite notes: ${appState.profile.kidAges}
+    - Food preferences and cooking style: ${appState.profile.preferences}
     - Favorite meals to inspire: ${appState.profile.favoriteMeals}
     - Allergies (NEVER include these): ${appState.profile.allergies}
     - Dislikes / Exclusions (Do not suggest these): ${appState.profile.dislikes}
     - Planning scopes: Breakfasts (${appState.profile.planBreakfast}), Lunches (${appState.profile.planLunch}), Dinners (${appState.profile.planDinner})
+    - Preferred store or shopping route: ${appState.shopping?.store || 'Not specified'}
+    - Weekly budget target: ${appState.shopping?.budget || 'Not specified'}
+    - Shopping handoff mode: ${appState.shopping?.mode || 'list'} (list means manual review list/cart JSON; helper means browser helper scripts only, still manual review)
     
     Memory Feedback (Use this to customize suggestions):
     ${memoryLoop}
@@ -1620,7 +1883,9 @@ document.getElementById('generatePlanBtn').onclick = async () => {
     Notes:
     - Balance proteins so there are no repeating main proteins in a row (e.g. mix ground beef, chicken thighs, chicken breasts, pork tenderloin, or vegetarian).
     - Exclude allergens and dislikes. If user says 'no nuts', do not add ingredients containing nuts.
-    - Set ingredients prices realistically. Ensure pantry staples have 'have: true' so they do not default to buy.
+    - Use child ages/appetite notes to set realistic portions and kid-facing mitigation notes.
+    - Set ingredient prices as estimates only. Do not imply live grocery pricing.
+    - Ensure pantry staples have 'have: true' so they do not default to buy.
   `;
   
   try {
@@ -1652,6 +1917,7 @@ document.getElementById('generatePlanBtn').onclick = async () => {
     renderMeals();
     renderShoppingList();
     renderReferences();
+    renderSetupGuide();
     updateLedger();
     
     alert("Weekly meal plan generated successfully!");
@@ -1679,8 +1945,12 @@ async function replaceSingleMeal(mealId, day) {
     User Profile:
     - Name: ${appState.profile.name}
     - Adults: ${appState.profile.adults}, Kids: ${appState.profile.kids}
+    - Children ages/appetite: ${appState.profile.kidAges}
+    - Food preferences/cooking style: ${appState.profile.preferences}
     - Allergies: ${appState.profile.allergies}
     - Dislikes: ${appState.profile.dislikes}
+    - Preferred store: ${appState.shopping?.store || 'Not specified'}
+    - Weekly budget target: ${appState.shopping?.budget || 'Not specified'}
     
     Current ingredients map in use: ${JSON.stringify(appState.ingredients)}
 
@@ -1732,7 +2002,11 @@ async function replaceSingleMeal(mealId, day) {
     const mealIdx = appState.meals.findIndex(m => m.id === mealId);
     if (mealIdx !== -1) {
       const newMeal = data.meal;
-      newMeal.img = `https://image.pollinations.ai/prompt/mouthwatering%20${encodeURIComponent(newMeal.n)}%20close%20up%20food%20photography%20natural%20light%20rustic%20ceramic`;
+      if (appState.api.imageGen === 'icons') {
+        delete newMeal.img;
+      } else {
+        newMeal.img = `https://image.pollinations.ai/prompt/mouthwatering%20${encodeURIComponent(newMeal.n)}%20close%20up%20food%20photography%20natural%20light%20rustic%20ceramic`;
+      }
       
       if (appState.api.imageGen === 'openai') {
         generateDallEImage(newMeal.n).then(url => {
@@ -1762,6 +2036,12 @@ async function replaceSingleMeal(mealId, day) {
 }
 
 async function spinUpImages() {
+  if (appState.api.imageGen === 'icons') {
+    appState.meals.forEach(m => { delete m.img; });
+    saveState();
+    return;
+  }
+
   const needsImages = appState.meals.filter(m => !m.img || m.img.startsWith('http://localhost'));
   
   if (appState.api.imageGen === 'openai' && needsImages.length > 0) {
@@ -2094,16 +2374,36 @@ function copyCartJSON() {
   const cartItems = [];
   Object.keys(appState.ingredients).forEach(id => {
     if (activeIds.has(id) && !appState.have[id] && !appState.ingredients[id].stash) {
-      cartItems.push(appState.ingredients[id]);
+      cartItems.push({ id, ...appState.ingredients[id] });
     }
   });
   
-  navigator.clipboard.writeText(JSON.stringify(cartItems, null, 2))
-    .then(() => alert("Shopping list JSON copied to clipboard!"))
+  const payload = {
+    generatedAt: new Date().toISOString(),
+    store: appState.shopping?.store || '',
+    budget: appState.shopping?.budget || '',
+    shoppingMode: appState.shopping?.mode || 'list',
+    reviewRequired: true,
+    reviewNote: 'Manually verify item size, substitutions, price, delivery details, and checkout before buying.',
+    items: cartItems
+  };
+
+  const payloadText = JSON.stringify(payload, null, 2);
+  if (!navigator.clipboard) {
+    window.prompt("Copy this shopping payload:", payloadText);
+    return;
+  }
+
+  navigator.clipboard.writeText(payloadText)
+    .then(() => alert("Shopping payload copied to clipboard!"))
     .catch(err => alert("Copy failed: " + err));
 }
 
 function copyConsoleScript() {
+  if (!navigator.clipboard) {
+    window.prompt("Copy this helper script:", scriptBox.textContent);
+    return;
+  }
   navigator.clipboard.writeText(scriptBox.textContent)
     .then(() => alert("Script copied to clipboard! Paste this inside the target store's F12 console tab."))
     .catch(err => alert("Copy failed: " + err));
