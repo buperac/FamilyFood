@@ -4,6 +4,8 @@ AI meal planning, grocery-list cleanup, and household food feedback in one local
 
 FamilyFood is built for families who want a practical weekly meal loop: generate meals around real preferences, mark what you already own, skip meals, rate what worked, and keep a spreadsheet record for the next plan.
 
+The public app intentionally starts clean: no starter meals, ingredient quantities, prices, brands, allergies, or pantry assumptions are preloaded. The user, model, or setup agent populates those after configuration.
+
 ## What It Does
 
 - Builds weekly breakfast, lunch, and dinner plans from your family profile.
@@ -35,7 +37,7 @@ This is a local-first v1, not a hosted SaaS product.
 | `server.py` | Local proxy for model and image requests |
 | `google-apps-script.js` | Template for optional Google Sheets sync |
 | `setup_tracker.py` | Optional workbook generator for offline Excel tracking |
-| `recipes-print.html` | Printable sample recipe set |
+| `recipes-print.html` | Blank printable handoff page for agent-populated recipes |
 | `AI_ONBOARDING.md` | Instructions for AI coding agents helping a user configure the app |
 | `batch-images.json` | Example image-generation batch prompts |
 
@@ -61,6 +63,7 @@ http://localhost:8765
 - Choose meal scopes.
 - Add your model provider and API key.
 - Choose Google Sheets or local Excel mode.
+- Generate the first week in the app, or ask your coding agent to populate the first household-specific plan.
 
 Gemini may also work from a static host because the app has a direct Gemini fallback. OpenAI, Anthropic, Grok, and OpenAI image generation need `server.py`.
 
@@ -108,7 +111,8 @@ Run these only in your own browser session, while logged into the store. Review 
 ## Known Limits
 
 - Grocery helper scripts depend on store page markup and may break.
+- The shipped app starts blank; meals, quantities, prices, and printable recipes are populated after setup.
 - Ingredient prices are estimates until you log actual costs.
 - Google Sheets sync is fire-and-forget from the browser.
-- The printable recipe file is a starter sample, not an automatically regenerated export from the app.
+- The printable recipe file is a blank handoff page, not an automatically regenerated export from the app.
 - No license file is included yet; add one before inviting broad reuse or forks.

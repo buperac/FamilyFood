@@ -10,6 +10,7 @@ FamilyFood is a local-first family meal planner. Keep setup practical: profile, 
 - Do not complete grocery checkout or payment.
 - Do not bypass CAPTCHA, identity checks, or store anti-bot screens.
 - Do not hard-code one household's allergies, dislikes, brands, stores, or freezer inventory as product defaults.
+- Keep the public repo defaults clean: no starter meals, ingredient quantities, prices, pantry ownership, brands, or printable recipes.
 - Keep claims in README and UI aligned with implemented behavior.
 
 ## Step 1: Choose Storage Mode
@@ -56,12 +57,13 @@ Build a 7-day plan that follows the user's rules:
 - Include kid-facing mitigation notes when needed.
 - Estimate prices honestly and label them as estimates.
 
-If editing `meal-planner.html` directly:
+If editing `meal-planner.html` directly for a user-specific instance:
 
-1. Update only the seed data needed for the user's requested customization.
+1. Populate only the user-specific instance with meals, ingredients, quantities, and prices.
 2. Preserve `LOCAL_STORAGE_KEY` unless the user asks for a migration.
 3. Never bake secrets into `appState`.
 4. If changing baked-in defaults for an existing user, update `lastUpdatedByAgent` to a current epoch timestamp so the app can merge newer defaults while preserving logs.
+5. Do not commit user-specific populated seed data back to the public default unless the user explicitly asks for a demo dataset.
 
 ## Step 4: Verify
 

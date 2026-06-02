@@ -10,6 +10,7 @@ Current v1 scope:
 - Keep `meal-planner.html`, `recipes-print.html`, `google-apps-script.js`, `setup_tracker.py`, `server.py`, `README.md`, and `AI_ONBOARDING.md` consistent.
 - Support optional Google Sheets sync and local Excel import/export.
 - Provide grocery helper payloads/scripts that users manually review before checkout.
+- Ship the public instance clean. The default repo should not include starter meals, prices, ingredient amounts, brands, pantry ownership, or household-specific printable recipes.
 
 Out of scope unless explicitly requested:
 - Hosted SaaS accounts, payments, user auth, central databases, subscriptions, or analytics.
@@ -34,6 +35,7 @@ If docs and code conflict, fix the docs or code so public claims match implement
 
 - No personal names, personal Google accounts, street addresses, private trackers, or family-specific constraints in tracked product files unless framed as removable sample data.
 - Do not commit API keys, Apps Script URLs, cookies, browser profiles, carts, payment details, or generated user workbooks.
+- Ingredient prices and quantities must be added by the user, model, or agent after setup; do not preload them in public defaults.
 - Ingredient prices must be labeled as estimates unless backed by actual logged purchases.
 - Shopping scripts must be described as helpers/experimental unless they were verified live against the store.
 - Warn users to manually review cart contents, substitutions, sizes, prices, delivery details, and checkout.
@@ -43,7 +45,7 @@ If docs and code conflict, fix the docs or code so public claims match implement
 - Keep the static/local workflow unless the user asks for a hosted version.
 - Keep edits tightly scoped. Do not refactor unrelated code for style.
 - Preserve `LOCAL_STORAGE_KEY` unless intentionally migrating user state.
-- If changing seeded defaults for existing users, update `lastUpdatedByAgent` only when the merge behavior is intended.
+- Keep seeded defaults empty for the public repo. If changing seeded defaults for a private/user-specific instance, update `lastUpdatedByAgent` only when the merge behavior is intended.
 - Never write secrets into default `appState`.
 - If changing recipe, ingredient, price, or portion logic, verify the meal grid, shopping list, ledger, skip toggles, pantry ticks, and Excel export.
 - After meaningful UI or app edits, run the local server and verify in a browser.

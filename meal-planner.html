@@ -511,7 +511,7 @@
       <span class="num">2</span>
       <h2>Shopping List & Value Optimizer</h2>
     </div>
-    <p class="sec-note">Optimized list based on your active dinners, breakfasts, and lunches. Ticked items represent pantry items or home stashes you do not need to buy.</p>
+    <p class="sec-note">This starts empty. Once an agent or model generates a plan, the list is built from active meals and any pantry items you already own.</p>
     
     <div class="control-row">
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -551,7 +551,7 @@
       <span class="num">3</span>
       <h2 id="breakfastTitle">Breakfast Options</h2>
     </div>
-    <p class="sec-note">Starter breakfast ideas for variety. Common breakfast staples are included in the starter shopping list and AI-generated plans can add more specific ingredients.</p>
+    <p class="sec-note">Breakfast ideas appear here after an agent or model generates a plan.</p>
     <div class="ref-grid" id="breakfastGrid">
       <!-- Breakfast cards render dynamically -->
     </div>
@@ -563,7 +563,7 @@
       <span class="num">4</span>
       <h2 id="lunchTitle">Lunch Options</h2>
     </div>
-    <p class="sec-note">Lunch ideas that can reuse dinner leftovers or stand alone. Adjust the shopping list after generating a plan if your lunches need extra ingredients.</p>
+    <p class="sec-note">Lunch ideas appear here after an agent or model generates a plan.</p>
     <div class="ref-grid" id="lunchGrid">
       <!-- Lunch cards render dynamically -->
     </div>
@@ -713,63 +713,11 @@
 
 <script>
 /* ---------- DEFAULT DATA ---------- */
-// Seed plan if the user hasn't generated anything yet
-const SEED_INGREDIENTS = {
-  cbreast:{n:'Chicken breast (1.5 lb)',c:'Protein',p:14.00,sub:'fresh or frozen'},
-  cthigh:{n:'Chicken thighs (2 lb)',c:'Protein',p:13.00,sub:'boneless or bone-in'},
-  beef:{n:'Ground beef (1.5 lb)',c:'Protein',p:12.00,sub:'lean or regular'},
-  pork:{n:'Pork tenderloin (1.5 lb)',c:'Protein',p:13.00,sub:'or pork chops'},
-  beans:{n:'Black beans (2 cans)',c:'Pantry & Dry',p:4.00,sub:'or pinto beans'},
-  eggs:{n:'Eggs (18 count)',c:'Dairy & Eggs',p:6.50,always:true},
-  milk:{n:'Milk (4 L)',c:'Dairy & Eggs',p:6.00,always:true},
-  yogurt:{n:'Greek yogurt',c:'Dairy & Eggs',p:7.00,always:true},
-  cheddar:{n:'Cheddar block',c:'Dairy & Eggs',p:6.50},
-  mozz:{n:'Mozzarella block',c:'Dairy & Eggs',p:7.50},
-  rice:{n:'Rice',c:'Pantry & Dry',p:8.00,sub:'jasmine, basmati, or long grain'},
-  pasta:{n:'Pasta',c:'Pantry & Dry',p:3.00},
-  tortillas:{n:'Flour tortillas',c:'Bakery',p:4.50},
-  pizzaDough:{n:'Pizza dough or flatbreads',c:'Bakery',p:5.00},
-  oats:{n:'Rolled oats',c:'Pantry & Dry',p:5.00,always:true},
-  berries:{n:'Frozen berries',c:'Frozen',p:7.00,always:true},
-  peppers:{n:'Bell peppers (3)',c:'Produce',p:7.50},
-  onion:{n:'Yellow onions',c:'Produce',p:3.50},
-  garlic:{n:'Garlic',c:'Produce',p:2.00},
-  romaine:{n:'Romaine hearts',c:'Produce',p:5.00},
-  tomatoes:{n:'Tomatoes',c:'Produce',p:5.00},
-  cucumber:{n:'Cucumber',c:'Produce',p:2.00},
-  potatoes:{n:'Potatoes',c:'Produce',p:6.00},
-  broccoli:{n:'Broccoli florets',c:'Frozen',p:5.00},
-  carrots:{n:'Carrots',c:'Produce',p:3.00},
-  marinara:{n:'Marinara sauce',c:'Pantry & Dry',p:4.00},
-  pizzaSauce:{n:'Pizza sauce',c:'Pantry & Dry',p:3.00},
-  tacoSeasoning:{n:'Taco seasoning',c:'Pantry & Dry',p:2.00},
-  soy:{n:'Soy sauce',c:'Pantry Staples',p:3.50},
-  bbq:{n:'BBQ sauce',c:'Pantry & Dry',p:4.00},
-  oil:{n:'Olive oil or neutral oil',c:'Pantry Staples',p:9.00,have:true},
-  spices:{n:'Basic spice rack',c:'Pantry Staples',p:0,have:true,stash:true}
-};
-
-const SEED_MEALS = [
-  {id:'w1mon',img:'',w:1,day:'Mon',n:'Sheet-Pan Chicken Fajitas',cu:'texmex',e:'🌯',cal:620,prep:'30m',kid:'med',b:'Chicken, peppers and onions roasted on one pan; build your own.',ing:['cbreast','tortillas','peppers','onion','cheddar','oil','spices'],m:'Toss chicken, sliced peppers and onion with oil and seasoning. Roast at 425°F for about 20 minutes, then serve with warm tortillas and cheddar.'},
-  {id:'w1tue',img:'',w:1,day:'Tue',n:'Ground Beef Bolognese',cu:'italian',e:'🍝',cal:760,prep:'35m',kid:'med',b:'A simple beef-and-tomato pasta night with room for picky eaters.',ing:['beef','pasta','marinara','onion','garlic','spices'],m:'Brown beef with onion and garlic, simmer with marinara and spices, then toss with cooked pasta. Keep plain noodles aside if needed.'},
-  {id:'w1wed',img:'',w:1,day:'Wed',n:'Veggie Fried Rice',cu:'asian',e:'🍚',cal:540,prep:'25m',kid:'low',b:'Rice, egg and vegetables in a fast skillet dinner.',ing:['rice','eggs','broccoli','carrots','soy','oil'],m:'Scramble eggs, set aside, then stir-fry rice with vegetables and soy sauce. Fold the eggs back in at the end.'},
-  {id:'w1thu',img:'',w:1,day:'Thu',n:'Black Bean Tacos',cu:'texmex',e:'🌮',cal:590,prep:'20m',kid:'low',b:'Low-cost vegetarian tacos with toppings served separately.',ing:['beans','tortillas','cheddar','tomatoes','romaine','tacoSeasoning'],m:'Warm beans with taco seasoning and a splash of water. Serve with tortillas, cheddar, lettuce and tomatoes so each person builds their own.'},
-  {id:'w1fri',img:'',w:1,day:'Fri',n:'Homemade Pizza Night',cu:'italian',e:'🍕',cal:700,prep:'30m',kid:'low',b:'A flexible Friday dinner using dough, sauce, cheese and simple toppings.',ing:['pizzaDough','pizzaSauce','mozz','peppers'],m:'Top dough or flatbreads with sauce, mozzarella and sliced peppers. Bake hot until browned and bubbling.'},
-  {id:'w1sat',img:'',w:1,day:'Sat',n:'BBQ Pork Tenderloin & Potatoes',cu:'bbq',e:'🥔',cal:680,prep:'40m',kid:'med',b:'A weekend-leaning tray dinner with potatoes and broccoli.',ing:['pork','potatoes','broccoli','bbq','oil','spices'],m:'Roast seasoned potatoes first, then add pork and broccoli. Brush pork with BBQ sauce near the end and rest before slicing.'},
-  {id:'w1sun',img:'',w:1,day:'Sun',n:'Lemon Chicken Rice Bowls',cu:'classic',e:'🍋',cal:650,prep:'35m',kid:'med',b:'Chicken, rice, cucumber and tomato bowls with yogurt sauce.',ing:['cthigh','rice','cucumber','tomatoes','yogurt','garlic','oil','spices'],m:'Cook chicken with garlic, oil and seasoning, then serve over rice with cucumber, tomatoes and a quick yogurt sauce.'}
-];
-
-const SEED_BREAKFAST = [
-  {n:'Veggie scramble',m:'8 min · ~380 cal',d:'Eggs scrambled with vegetables and cheddar.'},
-  {n:'Greek yogurt bowl',m:'3 min · ~410 cal',d:'Greek yogurt with mixed berries, oats or granola, and honey.'},
-  {n:'Overnight oats',m:'5 min prep · ~430 cal',d:'Oats, milk and yogurt mixed the night before; add berries in the morning.'}
-];
-
-const SEED_LUNCH = [
-  {n:'Mediterranean Salad',m:'~590 cal',d:'Cucumber, tomatoes, olives, feta and chickpeas.'},
-  {n:'Chicken Rice Bowl',m:'~620 cal',d:'Leftover chicken over rice with cucumber, tomatoes and yogurt sauce.'},
-  {n:'Taco Salad',m:'~560 cal',d:'Romaine, beans, cheddar, tomatoes and a quick salsa-style dressing.'}
-];
+// Clean public defaults: an agent or model populates meals, quantities, and prices.
+const SEED_INGREDIENTS = {};
+const SEED_MEALS = [];
+const SEED_BREAKFAST = [];
+const SEED_LUNCH = [];
 
 /* ---------- APP STATE ---------- */
 const LOCAL_STORAGE_KEY = 'meal-planner-v2-state';
@@ -801,7 +749,7 @@ let appState = {
   ingredients: SEED_INGREDIENTS,
   breakfast: SEED_BREAKFAST,
   lunch: SEED_LUNCH,
-  have: { oil: true, spices: true },
+  have: {},
   skip: {},
   fav: {},
   ratings: {},
@@ -1105,7 +1053,7 @@ function renderMeals() {
     empty.style.cssText = 'grid-column: 1/-1; text-align: center; color: var(--ink-soft); padding: 48px;';
     empty.textContent = showingFavoritesOnly 
       ? 'No favorites yet! Click the Heart icon on any meal card.' 
-      : 'No dinners found. Use the "Generate Weekly Plan" button to plan this week!';
+      : 'No dinners yet. Complete setup, then use "Generate Weekly Plan" or have your agent populate the first week.';
     mealGrid.appendChild(empty);
     return;
   }
@@ -1318,6 +1266,16 @@ function renderShoppingList() {
     categories[item.c].push({ id, ...item });
   });
 
+  if (!Object.keys(categories).length) {
+    const empty = document.createElement('div');
+    empty.className = 'ing-group-card';
+    empty.style.textAlign = 'center';
+    empty.style.color = 'var(--ink-soft)';
+    empty.textContent = 'No grocery items yet. The agent-generated meal plan will add ingredients, quantities, prices, and pantry defaults.';
+    shoppingArea.appendChild(empty);
+    return;
+  }
+
   const categoryOrder = ['Protein', 'Produce', 'Dairy & Eggs', 'Frozen', 'Pantry & Dry', 'Bakery', 'Pantry Staples'];
   
   const renderCategoryCard = (cat) => {
@@ -1455,6 +1413,13 @@ function money(num) {
 function renderReferences() {
   breakfastGrid.innerHTML = '';
   lunchGrid.innerHTML = '';
+
+  if (!appState.breakfast.length) {
+    const empty = document.createElement('div');
+    empty.className = 'ref-card';
+    empty.innerHTML = '<h4>No breakfast plan yet</h4><p>Generate a plan or have your agent add breakfast options.</p>';
+    breakfastGrid.appendChild(empty);
+  }
   
   appState.breakfast.forEach(bf => {
     const c = document.createElement('div');
@@ -1462,6 +1427,13 @@ function renderReferences() {
     c.innerHTML = `<h4>${escapeHTML(bf.n)}</h4><div class="meta">${escapeHTML(bf.m)}</div><p>${escapeHTML(bf.d)}</p>`;
     breakfastGrid.appendChild(c);
   });
+
+  if (!appState.lunch.length) {
+    const empty = document.createElement('div');
+    empty.className = 'ref-card lunch';
+    empty.innerHTML = '<h4>No lunch plan yet</h4><p>Generate a plan or have your agent add lunch options.</p>';
+    lunchGrid.appendChild(empty);
+  }
   
   appState.lunch.forEach(l => {
     const c = document.createElement('div');
