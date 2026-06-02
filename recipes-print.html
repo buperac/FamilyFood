@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Gronning Family Kitchen — Printable Recipes</title>
+<title>FamilyFood — Printable Recipes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="bar no-print"><div class="bar-in">
-  <b>🍳 Gronning Recipes</b>
+  <b>🍳 FamilyFood Recipes</b>
   <button class="printbtn" onclick="window.print()">🖨 Print / Save as PDF</button>
   <span class="links">
     <a href="#w1">Week 1</a><a href="#w2">Week 2</a><a href="#w3">Week 3</a><a href="#ref">Breakfast &amp; Lunch</a>
@@ -93,21 +93,21 @@
 </div></div>
 <div class="wrap">
   <div class="intro no-print">
-    <div class="eyebrow">Cupboard Copy · May 25 – Jun 14, 2026</div>
-    <h1>The Gronning Family Kitchen</h1>
-    <p>Every dinner with full amounts and steps — one recipe per printed page, sized to read while you cook. Hit <b>Print / Save as PDF</b> and keep it with the groceries. Quantities serve ~5 adult-equivalents (family of six, with leftovers). Beef is from your freezer stash; no fish; <b>no nuts</b> (peanut + tree-nut allergy in household — verify granola, jarred curry sauces, etc.); chicken is non-halal.</p>
+    <div class="eyebrow">Printable starter recipe set</div>
+    <h1>FamilyFood Printable Kitchen</h1>
+    <p>Every dinner has full amounts and steps — one recipe per printed page, sized to read while you cook. Hit <b>Print / Save as PDF</b> and keep it with the groceries. Quantities are starter estimates for a family-sized meal; adjust portions, allergies, brands and budget rules for your household.</p>
   </div>
   <div id="dinnerArea"></div>
   <section id="ref">
     <h2 class="wkhead" style="color:var(--honey)">Breakfast rotation</h2>
-    <p class="serves no-print" style="margin-bottom:12px">Eggs stay the backbone; these add variety. Full versions live in <b>breakfast-rotation.md</b>.</p>
+    <p class="serves no-print" style="margin-bottom:12px">Fast breakfast options that can be adapted to your household preferences.</p>
     <div class="refgrid" id="bfArea"></div>
     <h2 class="wkhead" style="color:var(--herb)">Lunch — interesting salads</h2>
-    <p class="serves no-print" style="margin-bottom:12px">For the grown-ups; many reuse last night's dinner. Full versions live in <b>lunch-salads.md</b>.</p>
+    <p class="serves no-print" style="margin-bottom:12px">Lunch ideas that can reuse dinner leftovers or stand alone.</p>
     <div class="refgrid" id="lnArea"></div>
   </section>
   <footer class="no-print">
-    <p><b>The Gronning Family Kitchen</b> — printable companion to <b>meal-planner.html</b>. Rate meals and jot notes in the interactive planner; full breakfast/lunch recipes are in the markdown files. Prices/quantities are estimates; adjust to taste.</p>
+    <p><b>FamilyFood</b> — printable sample companion to <b>meal-planner.html</b>. Rate meals and jot notes in the interactive planner. Prices and quantities are estimates; adjust to taste.</p>
   </footer>
 </div>
 <script>
@@ -126,7 +126,7 @@ const DINNERS=[
  steps:['Heat oven to 425°F.','On a large sheet pan, toss chicken, peppers and onion with the oil and seasoning in one even layer.','Roast 20–22 min, stirring once, until chicken reaches 165°F and the veg edges char.','Warm tortillas (10 sec each in the microwave, or foil-wrapped in the oven for the last 5 min).','Serve buffet-style — everyone builds their own.'],
  hacks:['Pull a few plain chicken strips aside before seasoning for the 4yo.','Kids are often happy with tortilla + cheese + plain chicken.']},
 {wk:1,day:'Tuesday',title:'Spaghetti + Ground Beef Bolognese & Caesar',cuisine:'Italian',cal:'~830',prep:'30 min',kid:'Kid: medium',beef:true,serves:'~5 adult servings',
- ing:['1 lb spaghetti','1.5 lb ground beef (freezer stash, thawed)','1 large onion, diced','4 cloves garlic, minced','2 tbsp olive oil','1 jar (24 oz) marinara','1 tbsp tomato paste (optional, deepens flavour)','1 tsp Italian seasoning; salt + pepper','1/2 cup grated parmesan','Caesar: 3 romaine hearts chopped, 1 cup croutons, 1/3 cup Caesar dressing, shaved parm'],
+ ing:['1 lb spaghetti','1.5 lb ground beef, thawed','1 large onion, diced','4 cloves garlic, minced','2 tbsp olive oil','1 jar (24 oz) marinara','1 tbsp tomato paste (optional, deepens flavour)','1 tsp Italian seasoning; salt + pepper','1/2 cup grated parmesan','Caesar: 3 romaine hearts chopped, 1 cup croutons, 1/3 cup Caesar dressing, shaved parm'],
  steps:['Brown the beef in oil over medium-high, breaking it up, 7–8 min; drain excess fat.','Add onion + garlic; cook 4 min until soft. Season.','Stir in tomato paste 1 min, then marinara + Italian seasoning; simmer 20–25 min.','Boil spaghetti to al dente; drain.','Toss pasta with sauce; top with parmesan.','Toss the Caesar just before serving.'],
  hacks:['Reserve plain buttered noodles + parm for the 4yo (no sauce).'],
  leftover:'1–1.5 cups sauce left → wife’s lunch over greens, or freeze for a quick pasta night.'},
@@ -168,7 +168,7 @@ const DINNERS=[
  steps:['Heat oven to 425°F. Toss potato wedges with oil + seasoning; roast 30–35 min, flipping once.','Brown the beef over medium-high 7 min; drain fat. Add onion + pepper, cook 5 min.','Stir in tomato sauce, paste, brown sugar, Worcestershire and mustard; simmer 8–10 min until thick. Season.','Spoon onto toasted buns; serve with the fries.'],
  hacks:['One of the easiest kid wins — sweet-savoury and familiar.']},
 {wk:2,day:'Thursday',title:'Slow-Cooker Honey-Garlic Chicken Thighs + Rice',cuisine:'Asian-leaning',cal:'~580',prep:'10 min active',kid:'Kid: low',serves:'~5 adult servings',
- ing:['2.5 lb boneless chicken thighs (Maple Leaf — not halal)','Sauce: 1/2 cup honey, 1/3 cup soy sauce, 6 cloves garlic minced, 1 tbsp grated ginger, 2 tbsp ketchup, 1 tsp sesame oil','1 tbsp cornstarch + 2 tbsp water (slurry, to finish)','1.5 cups jasmine rice (uncooked); green onion + sesame to garnish'],
+ ing:['2.5 lb boneless chicken thighs','Sauce: 1/2 cup honey, 1/3 cup soy sauce, 6 cloves garlic minced, 1 tbsp grated ginger, 2 tbsp ketchup, 1 tsp sesame oil','1 tbsp cornstarch + 2 tbsp water (slurry, to finish)','1.5 cups jasmine rice (uncooked); green onion + sesame to garnish'],
  steps:['Morning: place thighs in the slow cooker; whisk the sauce and pour over. Low 5–6 hrs (or High 3 hrs).','~20 min before serving: cook the rice.','Stir the cornstarch slurry into the cooker; lid off, High 10–15 min to thicken (or reduce the sauce in a pot on the stove).','Serve the thighs + sauce over rice; garnish.'],
  hacks:['For a sauce-averse 4yo, cook one thigh plain and fully through (175°F) on the stovetop rather than pulling a raw one from the cooker; keep rice as the safe carb.']},
 {wk:2,day:'Friday',title:'Calzone Night',cuisine:'Italian',cal:'~850',prep:'45 min',kid:'Kid: low',serves:'~5 servings',
@@ -200,7 +200,7 @@ const DINNERS=[
  hacks:['Deconstructed-bar format — reserve plain chicken; put feta, onion and tzatziki on the side.'],
  leftover:'Chicken → wife’s Greek / Mediterranean chicken salad.'},
 {wk:3,day:'Thursday',title:'BBQ Chicken Drumsticks + Corn + Coleslaw',cuisine:'Summer BBQ',cal:'~620',prep:'45 min',kid:'Kid: low',serves:'~5 servings',
- ing:['3 lb chicken drumsticks (Maple Leaf — not halal)','1 tbsp oil; salt, pepper, 1 tsp paprika','1 cup BBQ sauce','6 ears corn (or frozen cobs)','Slaw: 1 bag coleslaw mix + 1/3 cup coleslaw dressing'],
+ ing:['3 lb chicken drumsticks','1 tbsp oil; salt, pepper, 1 tsp paprika','1 cup BBQ sauce','6 ears corn (or frozen cobs)','Slaw: 1 bag coleslaw mix + 1/3 cup coleslaw dressing'],
  steps:['Heat oven to 425°F. Pat drumsticks dry; toss with oil + salt + pepper + paprika.','Roast on a rack 25 min.','Brush generously with BBQ sauce; roast 12–15 min more until 175°F and sticky.','Boil or grill the corn.','Toss the slaw with dressing just before serving.'],
  hacks:['Drumsticks are a kid magnet; sauce a few lightly for the little ones.']},
 {wk:3,day:'Friday',title:'Pizza Night',cuisine:'Italian',cal:'~820',prep:'40 min',kid:'Kid: low',serves:'3 pizzas (~5 servings)',
@@ -232,10 +232,10 @@ const BREAKFAST=[
 ];
 const LUNCH=[
  {n:'Mediterranean grain bowl',m:'~590 cal',u:'Pantry / fresh',i:'3/4 cup farro/quinoa, 1/2 cup chickpeas, cucumber, cherry tomato, red onion, feta, olives.',h:'Dress with olive oil + lemon + oregano + tahini. Pack dressing separately.'},
- {n:'Beet, feta & sunflower seed + apple',m:'~540 cal',u:'No leftover needed · nut-free',i:'Arugula, 1 cooked beet, feta, 2 tbsp sunflower seeds, 1/2 apple.',h:'Balsamic + honey + Dijon + olive oil. No cooking. (Nut-free swap for walnut.)'},
+{n:'Beet, feta & sunflower seed + apple',m:'~540 cal',u:'No leftover needed',i:'Arugula, 1 cooked beet, feta, 2 tbsp sunflower seeds, 1/2 apple.',h:'Balsamic + honey + Dijon + olive oil. No cooking.'},
  {n:'Mexican street corn salad',m:'~480 cal',u:'Pantry-driven',i:'1.5 cups corn, 1/2 cup black beans, cotija/feta, red onion, cilantro.',h:'Lime + mayo + chili powder. Add leftover chicken/pork for +protein.'},
  {n:'Mediterranean kofta bowl',m:'~590 cal',u:'Uses Wed-1 kofta',i:'4–5 kofta, romaine + arugula, rice/chickpeas, cucumber, tomato, feta.',h:'Yogurt + lemon + mint dressing. Cleanly repurposes Wednesday.'},
- {n:'Asian chicken cabbage slaw',m:'~600 cal',u:'Uses roast chicken · nut-free',i:'Napa + romaine, chicken, shredded carrot, cilantro, green onion, crispy chow mein noodles (check label).',h:'Soy + lime + rice vinegar + ginger + honey + neutral oil + sesame oil. Nut-free (no peanut).'},
+{n:'Asian chicken cabbage slaw',m:'~600 cal',u:'Uses roast chicken',i:'Napa + romaine, chicken, shredded carrot, cilantro, green onion, crispy chow mein noodles (check label).',h:'Soy + lime + rice vinegar + ginger + honey + neutral oil + sesame oil.'},
  {n:'Buffalo chicken salad',m:'~520 cal',u:'Uses chicken',i:'Chicken in Frank’s, romaine, celery, blue cheese/feta, carrot.',h:'Ranch or blue-cheese dressing.'},
  {n:'Korean beef-bowl salad',m:'~620 cal',u:'Uses Sat-1 beef',i:'Beef, romaine + napa, cold rice, cucumber, carrot, optional fried egg.',h:'Soy + rice vinegar + sesame + honey + sesame seeds.'},
  {n:'Caprese + chicken',m:'~570 cal',u:'Uses roast chicken',i:'Arugula, chicken, cherry tomato, fresh mozzarella, basil.',h:'Olive oil + balsamic glaze. Light and summery.'}

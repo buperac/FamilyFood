@@ -517,15 +517,15 @@
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <button class="btn" onclick="checkAllPantry(true)">✓ Have all Pantry Staples</button>
         <button class="btn" onclick="checkAllPantry(false)">Reset Ticks</button>
-        <button class="btn primary" id="openShoppingHubBtn">🛒 Shop Online (AI Automation)</button>
+        <button class="btn primary" id="openShoppingHubBtn">🛒 Cart Helper Scripts</button>
       </div>
     </div>
 
     <!-- Browser shopping drawer -->
     <div class="automation-drawer" id="automationDrawer">
-      <h3 style="font-family:'Fraunces'; margin-bottom:12px;">Browser Grocery Shopping Hub</h3>
+      <h3 style="font-family:'Fraunces'; margin-bottom:12px;">Browser Grocery Helper Hub</h3>
       <p style="font-size:14px; margin-bottom:12px; color:var(--ink-soft);">
-        If your AI has browser control, or you want to auto-fill your cart, choose a store below. You can copy the shopping cart payload or run this script in your browser's Developer Tools Console (F12) while logged into the store.
+        Copy the shopping payload or generate a store helper script for your own browser session. These scripts are experimental because grocery websites change often; always review every cart item, size, substitution, price, and checkout step yourself.
       </p>
       
       <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap;">
@@ -535,7 +535,7 @@
         <button class="btn green" onclick="copyCartJSON()">📋 Copy Cart JSON</button>
       </div>
 
-      <div id="scriptTitle" style="font-weight:700; font-size:14px;">Walmart Console Integration Script</div>
+      <div id="scriptTitle" style="font-weight:700; font-size:14px;">Walmart Helper Script</div>
       <div class="script-container" id="scriptBox">// Loading script...</div>
       <button class="btn" onclick="copyConsoleScript()">Copy Script to Clipboard</button>
     </div>
@@ -551,7 +551,7 @@
       <span class="num">3</span>
       <h2 id="breakfastTitle">Breakfast Options</h2>
     </div>
-    <p class="sec-note">Variety options for your mornings. Items are automatically appended to your shopping list unless skipped.</p>
+    <p class="sec-note">Starter breakfast ideas for variety. Common breakfast staples are included in the starter shopping list and AI-generated plans can add more specific ingredients.</p>
     <div class="ref-grid" id="breakfastGrid">
       <!-- Breakfast cards render dynamically -->
     </div>
@@ -563,7 +563,7 @@
       <span class="num">4</span>
       <h2 id="lunchTitle">Lunch Options</h2>
     </div>
-    <p class="sec-note">Nutritious salads or protein bowls utilizing leftover elements for maximum efficiency.</p>
+    <p class="sec-note">Lunch ideas that can reuse dinner leftovers or stand alone. Adjust the shopping list after generating a plan if your lunches need extra ingredients.</p>
     <div class="ref-grid" id="lunchGrid">
       <!-- Lunch cards render dynamically -->
     </div>
@@ -573,7 +573,7 @@
 
 <footer>
   <div class="wrap">
-    <p>© Gronning & Community Meal Hub. Generated with AI. Persisted locally in your browser.</p>
+    <p>© FamilyFood. Generated with AI. Persisted locally in your browser.</p>
     <button class="btn" onclick="resetAllApp()" style="margin-top:16px; border-color:var(--plum); color:var(--plum);">↺ Reset Settings & Data</button>
   </div>
 </footer>
@@ -592,7 +592,7 @@
         <h4 style="font-family:'Fraunces'; margin-bottom:14px; font-size:18px;">1. Personalization Profile</h4>
         <div class="form-group">
           <label for="profName">Your Name</label>
-          <input type="text" class="form-control" id="profName" placeholder="e.g. Kyle Gronning">
+          <input type="text" class="form-control" id="profName" placeholder="e.g. Alex Morgan">
         </div>
         <div class="form-inline">
           <div class="form-group">
@@ -619,7 +619,7 @@
         </div>
         <div class="form-group">
           <label for="profDislikes">Dislikes / Exclusions</label>
-          <input type="text" class="form-control" id="profDislikes" placeholder="e.g. Seafood, Halal only, Jerk seasoning, Pickles">
+          <input type="text" class="form-control" id="profDislikes" placeholder="e.g. Pork, seafood, very spicy food, pickles">
         </div>
         <div class="form-group">
           <label>Meals to Include in Planning</label>
@@ -691,7 +691,7 @@
             <label for="sheetUrl">Google Apps Script Web App URL</label>
             <input type="url" class="form-control" id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec">
             <p style="font-size:12px; color:var(--ink-soft); margin-top:6px;">
-              Copy-paste the deployed Apps Script URL. The app will sync your ratings and logs automatically. Code template resides in <a href="file:///c:/Users/kyle/Recipes/google-apps-script.js" target="_blank" style="color:var(--terra);">google-apps-script.js</a>.
+              Copy-paste the deployed Apps Script URL. The app will sync your ratings and logs automatically. Code template resides in <a href="google-apps-script.js" target="_blank" style="color:var(--terra);">google-apps-script.js</a>.
             </p>
           </div>
         </div>
@@ -715,33 +715,60 @@
 /* ---------- DEFAULT DATA ---------- */
 // Seed plan if the user hasn't generated anything yet
 const SEED_INGREDIENTS = {
-  beef:{n:'Ground beef (≈12 lb, 8 meals)',c:'Protein',p:0,sub:'from freezer stash',stash:true},
-  cbreast:{n:'Chicken breast ×2 packs',c:'Protein',p:0,sub:'Maple Leaf value pack'},
-  cthigh:{n:'Boneless chicken thighs',c:'Protein',p:0,sub:'Maple Leaf · not halal'},
-  cdrum:{n:'Chicken drumsticks',c:'Protein',p:0,sub:'Maple Leaf · not halal'},
-  cwhole:{n:'Whole chicken ×2',c:'Protein',p:0,sub:'two Sunday roasts'},
-  ptender:{n:'Pork tenderloin ×2',c:'Protein',p:0,sub:'Maple Leaf'},
-  eggs:{n:'Eggs ×2 (60 ct)',c:'Dairy & Eggs',p:0,sub:'Great Value',always:true},
-  milk:{n:'Milk 3% 4L ×2',c:'Dairy & Eggs',p:0,sub:'Dairyland',always:true},
-  cheddar:{n:'Cheddar block ×2',c:'Dairy & Eggs',p:0,sub:'Great Value'},
-  mozz:{n:'Mozzarella block ×2',c:'Dairy & Eggs',p:0,sub:'Great Value'},
-  oil:{n:'Olive oil',c:'Pantry Staples',p:0,have:true},
-  spices:{n:'Spice rack (cumin, paprika, oregano…)',c:'Pantry Staples',p:0,have:true,stash:true}
+  cbreast:{n:'Chicken breast (1.5 lb)',c:'Protein',p:14.00,sub:'fresh or frozen'},
+  cthigh:{n:'Chicken thighs (2 lb)',c:'Protein',p:13.00,sub:'boneless or bone-in'},
+  beef:{n:'Ground beef (1.5 lb)',c:'Protein',p:12.00,sub:'lean or regular'},
+  pork:{n:'Pork tenderloin (1.5 lb)',c:'Protein',p:13.00,sub:'or pork chops'},
+  beans:{n:'Black beans (2 cans)',c:'Pantry & Dry',p:4.00,sub:'or pinto beans'},
+  eggs:{n:'Eggs (18 count)',c:'Dairy & Eggs',p:6.50,always:true},
+  milk:{n:'Milk (4 L)',c:'Dairy & Eggs',p:6.00,always:true},
+  yogurt:{n:'Greek yogurt',c:'Dairy & Eggs',p:7.00,always:true},
+  cheddar:{n:'Cheddar block',c:'Dairy & Eggs',p:6.50},
+  mozz:{n:'Mozzarella block',c:'Dairy & Eggs',p:7.50},
+  rice:{n:'Rice',c:'Pantry & Dry',p:8.00,sub:'jasmine, basmati, or long grain'},
+  pasta:{n:'Pasta',c:'Pantry & Dry',p:3.00},
+  tortillas:{n:'Flour tortillas',c:'Bakery',p:4.50},
+  pizzaDough:{n:'Pizza dough or flatbreads',c:'Bakery',p:5.00},
+  oats:{n:'Rolled oats',c:'Pantry & Dry',p:5.00,always:true},
+  berries:{n:'Frozen berries',c:'Frozen',p:7.00,always:true},
+  peppers:{n:'Bell peppers (3)',c:'Produce',p:7.50},
+  onion:{n:'Yellow onions',c:'Produce',p:3.50},
+  garlic:{n:'Garlic',c:'Produce',p:2.00},
+  romaine:{n:'Romaine hearts',c:'Produce',p:5.00},
+  tomatoes:{n:'Tomatoes',c:'Produce',p:5.00},
+  cucumber:{n:'Cucumber',c:'Produce',p:2.00},
+  potatoes:{n:'Potatoes',c:'Produce',p:6.00},
+  broccoli:{n:'Broccoli florets',c:'Frozen',p:5.00},
+  carrots:{n:'Carrots',c:'Produce',p:3.00},
+  marinara:{n:'Marinara sauce',c:'Pantry & Dry',p:4.00},
+  pizzaSauce:{n:'Pizza sauce',c:'Pantry & Dry',p:3.00},
+  tacoSeasoning:{n:'Taco seasoning',c:'Pantry & Dry',p:2.00},
+  soy:{n:'Soy sauce',c:'Pantry Staples',p:3.50},
+  bbq:{n:'BBQ sauce',c:'Pantry & Dry',p:4.00},
+  oil:{n:'Olive oil or neutral oil',c:'Pantry Staples',p:9.00,have:true},
+  spices:{n:'Basic spice rack',c:'Pantry Staples',p:0,have:true,stash:true}
 };
 
 const SEED_MEALS = [
-  {id:'w1mon',img:'',w:1,day:'Mon',n:'Sheet-Pan Chicken Fajitas',cu:'texmex',e:'🌯',cal:580,prep:'30m',kid:'med',b:'Chicken, peppers and onions roasted on one pan; build your own.',ing:['cbreast','oil','spices'],m:'Toss, roast 425°F 20 min, serve.'},
-  {id:'w1tue',img:'',w:1,day:'Tue',n:'Ground Beef Bolognese',cu:'italian',e:'🍝',cal:830,prep:'30m',kid:'med',b:'Classic beef ragù over pasta with cheese.',ing:['beef','oil','spices'],m:'Brown beef, simmer, mix and serve.'},
-  {id:'w1wed',img:'',w:1,day:'Wed',n:'Tikka Masala Chicken',cu:'indian',e:'🍛',cal:620,prep:'35m',kid:'low',b:'Mild spiced chicken thighs in tikka sauce.',ing:['cthigh','oil','spices'],m:'Simmer and serve with rice.'}
+  {id:'w1mon',img:'',w:1,day:'Mon',n:'Sheet-Pan Chicken Fajitas',cu:'texmex',e:'🌯',cal:620,prep:'30m',kid:'med',b:'Chicken, peppers and onions roasted on one pan; build your own.',ing:['cbreast','tortillas','peppers','onion','cheddar','oil','spices'],m:'Toss chicken, sliced peppers and onion with oil and seasoning. Roast at 425°F for about 20 minutes, then serve with warm tortillas and cheddar.'},
+  {id:'w1tue',img:'',w:1,day:'Tue',n:'Ground Beef Bolognese',cu:'italian',e:'🍝',cal:760,prep:'35m',kid:'med',b:'A simple beef-and-tomato pasta night with room for picky eaters.',ing:['beef','pasta','marinara','onion','garlic','spices'],m:'Brown beef with onion and garlic, simmer with marinara and spices, then toss with cooked pasta. Keep plain noodles aside if needed.'},
+  {id:'w1wed',img:'',w:1,day:'Wed',n:'Veggie Fried Rice',cu:'asian',e:'🍚',cal:540,prep:'25m',kid:'low',b:'Rice, egg and vegetables in a fast skillet dinner.',ing:['rice','eggs','broccoli','carrots','soy','oil'],m:'Scramble eggs, set aside, then stir-fry rice with vegetables and soy sauce. Fold the eggs back in at the end.'},
+  {id:'w1thu',img:'',w:1,day:'Thu',n:'Black Bean Tacos',cu:'texmex',e:'🌮',cal:590,prep:'20m',kid:'low',b:'Low-cost vegetarian tacos with toppings served separately.',ing:['beans','tortillas','cheddar','tomatoes','romaine','tacoSeasoning'],m:'Warm beans with taco seasoning and a splash of water. Serve with tortillas, cheddar, lettuce and tomatoes so each person builds their own.'},
+  {id:'w1fri',img:'',w:1,day:'Fri',n:'Homemade Pizza Night',cu:'italian',e:'🍕',cal:700,prep:'30m',kid:'low',b:'A flexible Friday dinner using dough, sauce, cheese and simple toppings.',ing:['pizzaDough','pizzaSauce','mozz','peppers'],m:'Top dough or flatbreads with sauce, mozzarella and sliced peppers. Bake hot until browned and bubbling.'},
+  {id:'w1sat',img:'',w:1,day:'Sat',n:'BBQ Pork Tenderloin & Potatoes',cu:'bbq',e:'🥔',cal:680,prep:'40m',kid:'med',b:'A weekend-leaning tray dinner with potatoes and broccoli.',ing:['pork','potatoes','broccoli','bbq','oil','spices'],m:'Roast seasoned potatoes first, then add pork and broccoli. Brush pork with BBQ sauce near the end and rest before slicing.'},
+  {id:'w1sun',img:'',w:1,day:'Sun',n:'Lemon Chicken Rice Bowls',cu:'classic',e:'🍋',cal:650,prep:'35m',kid:'med',b:'Chicken, rice, cucumber and tomato bowls with yogurt sauce.',ing:['cthigh','rice','cucumber','tomatoes','yogurt','garlic','oil','spices'],m:'Cook chicken with garlic, oil and seasoning, then serve over rice with cucumber, tomatoes and a quick yogurt sauce.'}
 ];
 
 const SEED_BREAKFAST = [
-  {n:'Veggie scramble',m:'8 min · 380 cal',d:'Eggs scrambled with fresh spinach and cheddar.'},
-  {n:'Greek yogurt bowl',m:'3 min · 410 cal',d:'Greek yogurt with mixed berries and honey.'}
+  {n:'Veggie scramble',m:'8 min · ~380 cal',d:'Eggs scrambled with vegetables and cheddar.'},
+  {n:'Greek yogurt bowl',m:'3 min · ~410 cal',d:'Greek yogurt with mixed berries, oats or granola, and honey.'},
+  {n:'Overnight oats',m:'5 min prep · ~430 cal',d:'Oats, milk and yogurt mixed the night before; add berries in the morning.'}
 ];
 
 const SEED_LUNCH = [
-  {n:'Mediterranean Salad',m:'~590 cal',d:'Cucumber, tomatoes, olives, feta, chickpeas.'}
+  {n:'Mediterranean Salad',m:'~590 cal',d:'Cucumber, tomatoes, olives, feta and chickpeas.'},
+  {n:'Chicken Rice Bowl',m:'~620 cal',d:'Leftover chicken over rice with cucumber, tomatoes and yogurt sauce.'},
+  {n:'Taco Salad',m:'~560 cal',d:'Romaine, beans, cheddar, tomatoes and a quick salsa-style dressing.'}
 ];
 
 /* ---------- APP STATE ---------- */
@@ -774,7 +801,7 @@ let appState = {
   ingredients: SEED_INGREDIENTS,
   breakfast: SEED_BREAKFAST,
   lunch: SEED_LUNCH,
-  have: {},
+  have: { oil: true, spices: true },
   skip: {},
   fav: {},
   ratings: {},
@@ -2005,15 +2032,15 @@ function generateShoppingScript(store) {
   
   let script = "";
   if (store === 'walmart') {
-    scriptTitle.textContent = "Walmart.ca Console Shopping Injector";
+    scriptTitle.textContent = "Walmart.ca Helper Script";
     script = `
 /**
- * Copy-paste this script into your browser's F12 Developer Console on Walmart.ca
+ * Experimental helper: copy-paste this script into your browser's F12 Developer Console on Walmart.ca.
  * Log into your account first before running.
  */
 (async function() {
   const items = ${JSON.stringify(buyItems)};
-  console.log("Starting automated grocery inject for: " + items.length + " items");
+  console.log("Starting grocery helper for: " + items.length + " items");
   
   for (const item of items) {
     console.log("Searching for: " + item);
@@ -2031,18 +2058,18 @@ function generateShoppingScript(store) {
       console.log("⚠️ Could not locate direct add button for: " + item);
     }
   }
-  console.log("✅ All items processed! Please review your cart manually before checkout.");
+  console.log("✅ All items processed. Please review every cart item manually before checkout.");
 })();
     `;
   } else if (store === 'costco') {
-    scriptTitle.textContent = "Costco Same-Day Console Shopping Injector";
+    scriptTitle.textContent = "Costco Same-Day Helper Script";
     script = `
 /**
- * Copy-paste this script into Costco Same-Day Console (sameday.costco.ca)
+ * Experimental helper: copy-paste this script into Costco Same-Day Console (sameday.costco.ca).
  */
 (async function() {
   const items = ${JSON.stringify(buyItems)};
-  console.log("Injecting Costco order: " + items.length + " items");
+  console.log("Starting Costco helper for: " + items.length + " items");
   for (const item of items) {
     const searchBar = document.querySelector('input[type="search"]');
     if (searchBar) {
@@ -2058,19 +2085,19 @@ function generateShoppingScript(store) {
       }
     }
   }
-  console.log("Costco items loaded! Review cart now.");
+  console.log("Costco helper finished. Review every cart item manually before checkout.");
 })();
     `;
   } else if (store === 'instacart') {
-    scriptTitle.textContent = "Instacart Console Shopping Injector";
+    scriptTitle.textContent = "Instacart Helper Script";
     script = `
 /**
- * Instacart browser console cart loader
+ * Experimental Instacart browser console helper.
  */
 (async function() {
   const items = ${JSON.stringify(buyItems)};
-  console.log("Injecting Instacart order: " + items.length + " items");
-  // Simple automation injection loop
+  console.log("Starting Instacart helper for: " + items.length + " items");
+  // Simple helper loop
   for (const item of items) {
     const search = document.querySelector('input[name="search"]');
     if (search) {
@@ -2082,7 +2109,7 @@ function generateShoppingScript(store) {
       await new Promise(r => setTimeout(r, 2000));
     }
   }
-  console.log("Instacart cart loaded!");
+  console.log("Instacart helper finished. Review every cart item manually before checkout.");
 })();
     `;
   }

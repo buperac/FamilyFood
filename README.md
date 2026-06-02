@@ -1,68 +1,114 @@
-# AI Meal Planner & Grocery Shopping Hub
+# FamilyFood
 
-A premium, customizable, and open-source weekly meal planner that adapts to your family's sizes, preferences, allergies, and dislikes. It integrates with your chosen LLM (Gemini, Claude, ChatGPT, or Grok) to generate custom weekly menus, logs ratings and notes to Google Sheets or Excel, and automatically generates browser automation scripts to populate your online grocery carts.
+AI meal planning, grocery-list cleanup, and household food feedback in one local-first app.
 
-## Key Features
-- **Dynamic Onboarding & Profiles**: Define your name, number of adults/kids, favorite meals, allergies, and dislikes.
-- **Choose Your AI Brain**: Plug in your own API key for **Google Gemini**, **Anthropic Claude**, **OpenAI ChatGPT**, or **xAI Grok**.
-- **Free Keyless Images**: Automatically spins up high-quality mouthwatering recipe photos using Pollinations.ai (with DALL-E 3 fallback).
-- **Interactive Ratings & Replacements**: Skip meals (which deducts ingredients from your shopping list), rate meals, or replace individual meals on the fly.
-- **Double Sync Connectors**:
-  - **Google Sheets Web App**: Sync ratings, notes, and costs in real-time.
-  - **Offline Excel**: Upload an `.xlsx` file to sync price indexes or ratings, and export a clean spreadsheet copy client-side.
-- **Browser Shopping Console Injector**: Instantly generates browser console scripts to load ingredients directly into your shopping cart on **Walmart.ca**, **Costco Same-Day**, and **Instacart**.
+FamilyFood is built for families who want a practical weekly meal loop: generate meals around real preferences, mark what you already own, skip meals, rate what worked, and keep a spreadsheet record for the next plan.
 
----
+## What It Does
 
-## Getting Started
+- Builds weekly breakfast, lunch, and dinner plans from your family profile.
+- Supports bring-your-own API keys for Google Gemini, Anthropic Claude, OpenAI, or xAI Grok.
+- Tracks allergies, dislikes, favorite meals, adult count, and child count.
+- Calculates the active grocery list from planned meals, skipped meals, and pantry ticks.
+- Logs ratings, notes, favourites, cooked dates, estimated costs, and actual costs.
+- Syncs with Google Sheets through a user-deployed Apps Script web app.
+- Imports and exports Excel workbooks in the browser.
+- Generates grocery helper payloads and experimental browser-console scripts for Walmart.ca, Costco Same-Day, and Instacart.
+- Uses Pollinations.ai for keyless recipe images, with optional OpenAI image generation through the local proxy.
 
-### 1. Run the Local Server
-Since web browsers restrict calling APIs like OpenAI or Anthropic directly from raw local HTML files due to Cross-Origin Resource Sharing (CORS) rules, we provide a zero-dependency Python server.
+## Current Shape
 
-Run this command in your terminal inside the project directory:
+This is a local-first v1, not a hosted SaaS product.
+
+- No account system.
+- No central database.
+- No checkout or payment handling.
+- API keys are never committed to the repo, but they are stored in your browser's local storage after you enter them.
+- Non-Gemini model calls use the included local Python proxy so browser CORS does not block requests.
+- Shopping scripts are helpers, not guaranteed cart automation. Store websites change often. Always review the cart manually before checkout.
+
+## Files
+
+| File | Purpose |
+| --- | --- |
+| `meal-planner.html` | Main app: profile setup, meal generation, shopping list, ratings, Excel import/export, Sheets sync |
+| `server.py` | Local proxy for model and image requests |
+| `google-apps-script.js` | Template for optional Google Sheets sync |
+| `setup_tracker.py` | Optional workbook generator for offline Excel tracking |
+| `recipes-print.html` | Printable sample recipe set |
+| `AI_ONBOARDING.md` | Instructions for AI coding agents helping a user configure the app |
+| `batch-images.json` | Example image-generation batch prompts |
+
+## Quick Start
+
+1. Clone or download this repo.
+2. Start the local server:
+
 ```bash
 python server.py
 ```
-This will start a local server at **`http://localhost:8765`**. Open this address in your web browser.
 
-*(If you are host it on a static server like GitHub Pages, you can still use Google Gemini directly since Google supports CORS for browser clients, but for other providers, the local proxy server is recommended.)*
+3. Open:
 
----
+```text
+http://localhost:8765
+```
 
-## Integrations Setup
+4. Complete Setup / Settings:
 
-### 2. Connect to Google Sheets (Optional)
-To log your history, ratings, and track prices over time in a spreadsheet:
-1. Open a new Google Sheet.
-2. Go to **Extensions** -> **Apps Script**.
-3. Copy the code from [google-apps-script.js](file:///c:/Users/kyle/Recipes/google-apps-script.js) and paste it in.
-4. Click Save.
-5. Click **Deploy** -> **New Deployment**.
-6. Under "Select type", choose **Web App**.
-7. Set "Execute as" to **Me** (your email).
-8. Set "Who has access" to **Anyone** (this allows the client-side app to send sync payloads).
-9. Click **Deploy**. Authorize the script when prompted.
-10. Copy the generated **Web App URL** and paste it into the **Sync Integrations** step of the planner's settings wizard!
+- Add household size.
+- Add allergies and dislikes.
+- Choose meal scopes.
+- Add your model provider and API key.
+- Choose Google Sheets or local Excel mode.
 
-### 3. Connect to Excel (Optional)
-If you prefer offline spreadsheets:
-1. In the settings, switch storage mode to **Local Excel Mode**.
-2. Click **Export Excel** to download the meal log and ingredient list as a `.xlsx` file.
-3. Update prices or log entries in Excel.
-4. Click **Import Excel** to upload the spreadsheet back and sync your ratings/pantry inventory.
+Gemini may also work from a static host because the app has a direct Gemini fallback. OpenAI, Anthropic, Grok, and OpenAI image generation need `server.py`.
 
----
+## Optional Excel Workbook
 
-## How the AI Personalization Works (The Memory Loop)
-When generating weekly plans or replacements, the app reads your saved ratings (1-5 stars) and favorites from local storage. It appends these to the system prompt (e.g., *"Liked: Tacos (5 stars), Avoid: Tikka Chicken (1 star)"*) so the LLM continuously refines its meal suggestions to suit your family's tastes.
+The app can export Excel directly in the browser. If you want a blank starter workbook, install the optional Python dependency and run:
 
----
+```bash
+pip install -r requirements.txt
+python setup_tracker.py --name "Family"
+```
 
-## Online Grocery Shopping Automation
-1. Navigate to the **Shopping List** section.
-2. Ensure items you already have in stock are checked (they will be struck-through and removed from the total).
-3. Click **Shop Online**.
-4. Select your preferred store (**Walmart**, **Costco**, or **Instacart**) and copy the generated console script.
-5. Open your grocery store page in another tab and log in.
-6. Open browser DevTools by pressing **F12** (or right-click -> Inspect) and go to the **Console** tab.
-7. Paste the copied script and hit **Enter**. Watch the browser search and add items to your checkout cart! Review and place the order manually.
+This creates `Family-Kitchen-Tracker.xlsx`.
+
+## Optional Google Sheets Sync
+
+1. Create a Google Sheet.
+2. Open Extensions -> Apps Script.
+3. Paste the contents of `google-apps-script.js`.
+4. Deploy it as a Web App.
+5. Set "Execute as" to "Me".
+6. Set access to "Anyone".
+7. Copy the Web App URL into FamilyFood settings.
+
+Important: the app sends sync requests in `no-cors` mode, so the browser cannot verify the Apps Script response. Check the sheet after the first sync.
+
+## Shopping Helpers
+
+FamilyFood can generate:
+
+- A JSON shopping payload.
+- Walmart.ca helper script.
+- Costco Same-Day helper script.
+- Instacart helper script.
+
+Run these only in your own browser session, while logged into the store. Review every item, size, substitution, price, and checkout step yourself. Do not use the scripts to bypass CAPTCHA, identity checks, payment steps, or store rules.
+
+## Privacy
+
+- Meal plans, ratings, notes, and API keys are stored in browser local storage.
+- Google Sheets sync sends meal-log data to the Apps Script URL you provide.
+- Model requests send your profile and prompt to the model provider you choose.
+- Recipe images may be requested from Pollinations.ai or OpenAI, depending on settings.
+
+## Known Limits
+
+- Grocery helper scripts depend on store page markup and may break.
+- Ingredient prices are estimates until you log actual costs.
+- Google Sheets sync is fire-and-forget from the browser.
+- The printable recipe file is a starter sample, not an automatically regenerated export from the app.
+- No license file is included yet; add one before inviting broad reuse or forks.
